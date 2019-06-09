@@ -19,6 +19,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace GymLog.API
 {
@@ -65,7 +66,7 @@ namespace GymLog.API
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("VipOnly", policy => policy.RequireRole("VIP"));
+                options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User"));
             });
 
             services.AddMvc(options =>
@@ -73,7 +74,7 @@ namespace GymLog.API
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 options.Filters.Add(new AuthorizeFilter(policy));
             })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
             .AddJsonOptions(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -82,6 +83,28 @@ namespace GymLog.API
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<Seed>();
             services.AddScoped<IGymLogRepository, GymLogRepository>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Version = "v1",
+                    Title = "GymLog API",
+                    Description = ".NET Core Web API",
+                    TermsOfService = "None",
+                    Contact = new Contact
+                    {
+                        Name = "Piotr Strzelecki",
+                        Email = "Piotr.Strzelecki93@gmail.com",
+                        Url = "https://www.facebook.com/pioter.strzelecki"
+                    },
+                    License = new License
+                    {
+                        Name = "Use under MIT License",
+                        Url = "https://opensource.org/licenses/MIT"
+                    }
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed seeder)
@@ -113,6 +136,13 @@ namespace GymLog.API
             app.UseAuthentication();
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "GymLog API V1");
+                c.RoutePrefix = string.Empty;
+            });
             app.UseMvc(routes =>
             {
                 routes.MapSpaFallbackRoute("spa-fallback", new { controller = "Fallback", action = "Index" });
