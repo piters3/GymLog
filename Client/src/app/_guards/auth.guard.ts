@@ -3,13 +3,14 @@ import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { Urls } from '../urls';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router,
-              private toastr: ToastrService) { }
+              private toastr: ToastrService, public i18n: TranslateService) { }
 
   canActivate(next: ActivatedRouteSnapshot): boolean {
     const roles = next.firstChild.data.roles as Array<string>;
@@ -19,7 +20,7 @@ export class AuthGuard implements CanActivate {
         return true;
       } else {
         this.router.navigate([Urls.homeUrl]);
-        this.toastr.error('You are not authorized to access this area');
+        this.toastr.error(this.i18n.instant('NotAuthorized'));
       }
     }
 
@@ -27,7 +28,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    this.toastr.error('You shall not pass!!!');
+    this.toastr.error(this.i18n.instant('YouShallNotPass'));
     this.router.navigate([Urls.homeUrl]);
     return false;
   }

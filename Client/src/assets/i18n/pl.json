@@ -1,0 +1,12 @@
+{
+    "Register": "Zarejestruj",
+    "Login": "Zaloguj",
+    "Welcome": "Witaj",
+    "SuccessfulLogin": "Zalogowano pomyślnie",
+    "LoggedOut": "Wylogowano",
+    "EditProfile": "Edytuj profil",
+    "Logout": "Wyloguj",
+    "NotAuthorized": "Nie masz uprawnień do dostępu do tego obszaru",
+    "YouShallNotPass": "Nie wejdziesz!!!",
+    "UserManagement": "Zarządzanie użytkownikami"
+}

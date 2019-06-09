@@ -1,0 +1,12 @@
+{
+    "Register": "Register",
+    "Login": "Login",
+    "Welcome": "Welcome",
+    "SuccessfulLogin": "Logged in successfully",
+    "LoggedOut": "Logged out",
+    "EditProfile": "Edit Profile",
+    "Logout": "Logout",
+    "NotAuthorized": "You are not authorized to access this area",
+    "YouShallNotPass": "You shall not pass!!!",
+    "UserManagement": "User Management"
+}
