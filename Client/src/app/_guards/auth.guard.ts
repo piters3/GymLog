@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { AuthService } from '../_services/auth.service';
 import { ToastrService } from 'ngx-toastr';
+import { Urls } from '../urls';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class AuthGuard implements CanActivate {
       if (match) {
         return true;
       } else {
-        this.router.navigate(['home']);
+        this.router.navigate([Urls.homeUrl]);
         this.toastr.error('You are not authorized to access this area');
       }
     }
@@ -27,7 +28,7 @@ export class AuthGuard implements CanActivate {
     }
 
     this.toastr.error('You shall not pass!!!');
-    this.router.navigate(['/home']);
+    this.router.navigate([Urls.homeUrl]);
     return false;
   }
 }

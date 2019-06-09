@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../_models/user';
+import { Urls } from '../urls';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -14,27 +14,18 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class UserService {
-  baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.baseUrl + 'users', httpOptions);
+    return this.http.get<User[]>(Urls.usersUrl, httpOptions);
   }
 
-  getUser(id): Observable<User> {
-    return this.http.get<User>(this.baseUrl + 'users/' + id, httpOptions);
+  getUser(id: number): Observable<User> {
+    return this.http.get<User>(Urls.userUrl + id, httpOptions);
   }
 
   updateUser(id: number, user: User) {
-    return this.http.put(this.baseUrl + 'users/' + id, user);
-  }
-
-  setMainPhoto(userId: number, id: number) {
-    return this.http.post(this.baseUrl + 'users/' + userId + '/photos/' + id + '/setMain', {});
-  }
-
-  deletePhoto(userId: number, id: number) {
-    return this.http.delete(this.baseUrl + 'users/' + userId + '/photos/' + id);
+    return this.http.put(Urls.userUrl + id, user);
   }
 }

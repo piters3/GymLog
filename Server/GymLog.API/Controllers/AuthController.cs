@@ -38,14 +38,20 @@ namespace GymLog.API.Controllers
         public async Task<IActionResult> Register(RegisterModel registerModel)
         {
             var user = _mapper.Map<User>(registerModel);
+
+            user.Enabled = true;
+            user.RegisterDate = DateTime.Now;
+
             var result = await _userManager.CreateAsync(user, registerModel.Password);
-            var userToReturn = _mapper.Map<UserDetailsModel>(user);
 
             if (result.Succeeded)
             {
                 result = await _userManager.AddToRoleAsync(user, "User");
                 if (result.Succeeded)
+                {
+                    var userToReturn = _mapper.Map<UserDetailsModel>(user);
                     return CreatedAtRoute("GetUser", new { controller = "Users", id = user.Id }, userToReturn);
+                }    
             }
 
             return BadRequest(result.Errors);

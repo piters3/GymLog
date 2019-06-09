@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Urls } from '../urls';
 
 @Component({
   selector: 'app-nav',
@@ -33,6 +34,6 @@ export class NavComponent implements OnInit {
   logout() {
     localStorage.removeItem('token');
     this.toastr.info('Logged out');
-    this.router.navigate(['/home']);
+    this.router.navigate([Urls.homeUrl]);
   }
 }

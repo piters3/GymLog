@@ -31,8 +31,8 @@ namespace GymLog.API.Controllers
                                   orderby user.UserName
                                   select new
                                   {
-                                      Id = user.Id,
-                                      UserName = user.UserName,
+                                      user.Id,
+                                      user.UserName,
                                       Roles = (from userRole in user.UserRoles
                                                join role in _context.Roles
                                                on userRole.RoleId

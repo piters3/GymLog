@@ -71,21 +71,6 @@ export class UserManagementComponent implements OnInit {
       }
     }
 
-    // for (let i = 0; i < availableRoles.length; i++) {
-    //   let isMatch = false;
-    //   for (let j = 0; j < userRoles.length; j++) {
-    //     if (availableRoles[i].name === userRoles[j]) {
-    //       isMatch = true;
-    //       availableRoles[i].checked = true;
-    //       roles.push(availableRoles[i]);
-    //       break;
-    //     }
-    //   }
-    //   if (!isMatch) {
-    //     availableRoles[i].checked = false;
-    //     roles.push(availableRoles[i]);
-    //   }
-    // }
     return roles;
   }
 }

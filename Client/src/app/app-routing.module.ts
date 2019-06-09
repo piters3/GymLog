@@ -20,7 +20,7 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
-      { path: 'admin', component: AdminPanelComponent, data: { roles: ['Admin', 'Moderator'] } },
+      { path: 'admin', component: AdminPanelComponent, data: { roles: ['Admin'] } },
     ]
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },
