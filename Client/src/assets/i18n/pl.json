@@ -1,12 +1,12 @@
 {
-    "Register": "Zarejestruj",
-    "Login": "Zaloguj",
-    "Welcome": "Witaj",
-    "SuccessfulLogin": "Zalogowano pomyślnie",
-    "LoggedOut": "Wylogowano",
-    "EditProfile": "Edytuj profil",
-    "Logout": "Wyloguj",
-    "NotAuthorized": "Nie masz uprawnień do dostępu do tego obszaru",
-    "YouShallNotPass": "Nie wejdziesz!!!",
-    "UserManagement": "Zarządzanie użytkownikami"
+  "Welcome": "Witaj",
+  "NotAuthorized": "Nie masz uprawnień do dostępu do tego obszaru",
+  "SuccessfulLogin": "Zalogowano pomyślnie",
+  "Logout": "Wyloguj",
+  "UserManagement": "Zarządzanie użytkownikami",
+  "YouShallNotPass": "Nie wejdziesz!!!",
+  "LoggedOut": "Wylogowano",
+  "Login": "Zaloguj",
+  "Register": "Zarejestruj",
+  "EditProfile": "Edytuj profil"
 }
