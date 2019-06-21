@@ -11,23 +11,25 @@ namespace GymLog.Resources
     {
         static void Main(string[] args)
         {
-            var pl = Resource.ResourceManager.GetResourceSet(CultureInfo.InvariantCulture, true, true);
-            var en = Resource.ResourceManager.GetResourceSet(CultureInfo.GetCultureInfo("en-US"), true, true);
-
+            var languages = new[] { "pl", "en" };
             var rootPath = GoUp(Environment.CurrentDirectory, 5);
             var clientTranslationsPath = $@"{rootPath}\Client\src\assets\i18n\";
 
-            Save(pl, clientTranslationsPath, nameof(pl));
-            Save(en, clientTranslationsPath, nameof(en));
+            foreach (var language in languages)
+            {
+                var culture = CultureInfo.GetCultureInfo(language);
+                var resource = Resource.ResourceManager.GetResourceSet(culture, true, true);
+                Save(resource, clientTranslationsPath, language);
+            }
         }
 
         private static void Save(IEnumerable resourceSet, string clientTranslationsPath, string suffix)
         {
-            var json = JsonString(resourceSet);
+            var json = ConvertToJson(resourceSet);
             File.WriteAllText($"{clientTranslationsPath}{suffix}.json", json);
         }
 
-        private static string JsonString(IEnumerable resourceSet)
+        private static string ConvertToJson(IEnumerable resourceSet)
         {
             var dictionary = resourceSet.Cast<DictionaryEntry>().ToDictionary(x => x.Key.ToString(), x => x.Value.ToString());
             return JsonConvert.SerializeObject(dictionary, Formatting.Indented);

@@ -3,6 +3,7 @@ import { User } from '../../_models/user';
 import { AdminService } from '../../_services/admin.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { RolesModalComponent } from '../roles-modal/roles-modal.component';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-user-management',
@@ -13,17 +14,20 @@ export class UserManagementComponent implements OnInit {
   users: User[];
   bsModalRef: BsModalRef;
 
-  constructor(private adminService: AdminService, private modalService: BsModalService) { }
+  constructor(private adminService: AdminService, private modalService: BsModalService, private spinner: NgxUiLoaderService) { }
 
   ngOnInit() {
     this.getUsersWithRoles();
   }
 
   getUsersWithRoles() {
+    this.spinner.start();
     this.adminService.getUsersWithRoles().subscribe((users: User[]) => {
       this.users = users;
+      this.spinner.stop();
     }, error => {
       console.log(error);
+      this.spinner.stop();
     });
   }
 
@@ -38,10 +42,13 @@ export class UserManagementComponent implements OnInit {
         roleNames: [...values.filter(el => el.checked === true).map(el => el.name)]
       };
       if (rolesToUpdate) {
+        this.spinner.start();
         this.adminService.updateUserRoles(user, rolesToUpdate).subscribe(() => {
           user.roles = [...rolesToUpdate.roleNames];
+          this.spinner.stop();
         }, error => {
           console.log(error);
+          this.spinner.stop();
         });
       }
     });

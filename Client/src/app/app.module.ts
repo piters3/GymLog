@@ -8,6 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NgxUiLoaderModule, NgxUiLoaderConfig, POSITION, SPINNER, PB_DIRECTION } from 'ngx-ui-loader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,6 +32,22 @@ export function tokenGetter() {
 export function HttpLoaderFactory(http: HttpClient) {
    return new TranslateHttpLoader(http);
 }
+
+const ngxUiLoaderConfig: NgxUiLoaderConfig = {
+   fgsSize: 70,
+   fgsPosition: POSITION.centerCenter,
+   fgsType: SPINNER.ballSpinFadeRotating,
+   bgsColor: 'red',
+   bgsPosition: POSITION.bottomCenter,
+   bgsSize: 40,
+   bgsType: SPINNER.rectangleBounce,
+   pbDirection: PB_DIRECTION.leftToRight,
+   pbThickness: 5,
+   blur: 30,
+   hasProgressBar: false,
+   overlayColor: 'rgba(0,0,0,0)',
+   threshold: 1
+ };
 
 @NgModule({
    declarations: [
@@ -71,7 +88,8 @@ export function HttpLoaderFactory(http: HttpClient) {
              useFactory: HttpLoaderFactory,
              deps: [HttpClient]
          }
-     })
+     }),
+     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig)
    ],
    providers: [
       AuthService,
