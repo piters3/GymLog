@@ -2,13 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { BsDropdownModule, TabsModule, ModalModule } from 'ngx-bootstrap';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { NgxUiLoaderModule, NgxUiLoaderConfig, POSITION, SPINNER, PB_DIRECTION } from 'ngx-ui-loader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,6 +23,7 @@ import { HasRoleDirective } from './_directives/hasRole.directive';
 import { UserManagementComponent } from './admin/user-management/user-management.component';
 import { AdminService } from './_services/admin.service';
 import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
+import { LoadingSpinnerComponent } from './_shared/components/loading-spinner/loading-spinner.component';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -32,22 +32,6 @@ export function tokenGetter() {
 export function HttpLoaderFactory(http: HttpClient) {
    return new TranslateHttpLoader(http);
 }
-
-const ngxUiLoaderConfig: NgxUiLoaderConfig = {
-   fgsSize: 70,
-   fgsPosition: POSITION.centerCenter,
-   fgsType: SPINNER.ballSpinFadeRotating,
-   bgsColor: 'red',
-   bgsPosition: POSITION.bottomCenter,
-   bgsSize: 40,
-   bgsType: SPINNER.rectangleBounce,
-   pbDirection: PB_DIRECTION.leftToRight,
-   pbThickness: 5,
-   blur: 30,
-   hasProgressBar: false,
-   overlayColor: 'rgba(0,0,0,0)',
-   threshold: 1
- };
 
 @NgModule({
    declarations: [
@@ -58,13 +42,15 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
       AdminPanelComponent,
       HasRoleDirective,
       UserManagementComponent,
-      RolesModalComponent
+      RolesModalComponent,
+      LoadingSpinnerComponent
    ],
    imports: [
       BrowserModule,
       AppRoutingModule,
       HttpClientModule,
       FormsModule,
+      ReactiveFormsModule,
       TabsModule.forRoot(),
       BsDropdownModule.forRoot(),
       ModalModule.forRoot(),
@@ -78,7 +64,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
       BrowserAnimationsModule,
       ToastrModule.forRoot({
          timeOut: 3000,
-         positionClass: 'toast-top-right',
+         positionClass: 'toast-bottom-right',
          preventDuplicates: true,
          progressBar: true
       }),
@@ -88,8 +74,7 @@ const ngxUiLoaderConfig: NgxUiLoaderConfig = {
              useFactory: HttpLoaderFactory,
              deps: [HttpClient]
          }
-     }),
-     NgxUiLoaderModule.forRoot(ngxUiLoaderConfig)
+     })
    ],
    providers: [
       AuthService,

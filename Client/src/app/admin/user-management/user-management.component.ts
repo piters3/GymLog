@@ -3,7 +3,7 @@ import { User } from '../../_models/user';
 import { AdminService } from '../../_services/admin.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { RolesModalComponent } from '../roles-modal/roles-modal.component';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-user-management',
@@ -11,24 +11,19 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
   styleUrls: ['./user-management.component.css']
 })
 export class UserManagementComponent implements OnInit {
-  users: User[];
+
   bsModalRef: BsModalRef;
+  users$: Observable<User[]>;
+  isLoading$: Observable<boolean>;
 
-  constructor(private adminService: AdminService, private modalService: BsModalService, private spinner: NgxUiLoaderService) { }
+  constructor(
+    private adminService: AdminService,
+    private modalService: BsModalService) { }
 
-  ngOnInit() {
-    this.getUsersWithRoles();
-  }
-
-  getUsersWithRoles() {
-    this.spinner.start();
-    this.adminService.getUsersWithRoles().subscribe((users: User[]) => {
-      this.users = users;
-      this.spinner.stop();
-    }, error => {
-      console.log(error);
-      this.spinner.stop();
-    });
+  ngOnInit(): void {
+    this.adminService.updateUsers();
+    this.users$ = this.adminService.getUsers;
+    this.isLoading$ = this.adminService.getLoading;
   }
 
   editRolesModal(user: User) {
@@ -36,22 +31,7 @@ export class UserManagementComponent implements OnInit {
       user,
       roles: this.getRolesArray(user)
     };
-    this.bsModalRef = this.modalService.show(RolesModalComponent, {initialState});
-    this.bsModalRef.content.updateSelectedRoles.subscribe((values) => {
-      const rolesToUpdate = {
-        roleNames: [...values.filter(el => el.checked === true).map(el => el.name)]
-      };
-      if (rolesToUpdate) {
-        this.spinner.start();
-        this.adminService.updateUserRoles(user, rolesToUpdate).subscribe(() => {
-          user.roles = [...rolesToUpdate.roleNames];
-          this.spinner.stop();
-        }, error => {
-          console.log(error);
-          this.spinner.stop();
-        });
-      }
-    });
+    this.bsModalRef = this.modalService.show(RolesModalComponent, {initialState} );
   }
 
   private getRolesArray(user: User) {
@@ -77,7 +57,6 @@ export class UserManagementComponent implements OnInit {
         roles.push(ar);
       }
     }
-
     return roles;
   }
 }
