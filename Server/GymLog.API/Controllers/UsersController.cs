@@ -24,31 +24,21 @@ namespace GymLog.API.Controllers
         public async Task<IActionResult> GetUsers()
         {
             var users = await _repo.GetUsers();
-
             var usersToReturn = _mapper.Map<IEnumerable<UserDetailsModel>>(users);
 
             return Ok(usersToReturn);
         }
 
-        [HttpGet("{id}", Name = "GetUser")]
-        public async Task<IActionResult> GetUser(int id)
-        {
-            var user = await _repo.GetUser(id);
-
-            var userToReturn = _mapper.Map<UserDetailsModel>(user);
-
-            return Ok(userToReturn);
-        }
 
         //[HttpPut("{id}")]
-        //public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
+        //public async Task<IActionResult> UpdateUser(int id, UserDetailsModel userForUpdate)
         //{
         //    if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
         //        return Unauthorized();
 
-        //    var userFromRepo = await _repo.GetUser(id, true);
+        //    var userFromRepo = await _repo.GetUser(id);
 
-        //    _mapper.Map(userForUpdateDto, userFromRepo);
+        //    _mapper.Map(userForUpdate, userFromRepo);
 
         //    if (await _repo.SaveAll())
         //        return NoContent();

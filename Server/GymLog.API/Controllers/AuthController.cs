@@ -66,7 +66,7 @@ namespace GymLog.API.Controllers
             if (result.Succeeded)
             {
                 var appUser = await _userManager.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == loginModel.Username.ToUpper());
-                var userToReturn = _mapper.Map<UserDetailsModel>(appUser);
+                var userToReturn = _mapper.Map<UserSummary>(appUser);
 
                 return Ok(new
                 {

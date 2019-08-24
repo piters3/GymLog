@@ -22,7 +22,7 @@ import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { HasRoleDirective } from './_directives/hasRole.directive';
 import { UserManagementComponent } from './admin/user-management/user-management.component';
 import { AdminService } from './_services/admin.service';
-import { RolesModalComponent } from './admin/roles-modal/roles-modal.component';
+import { UserEditModalComponent } from './admin/user-edit-modal/user-edit-modal.component';
 import { LoadingSpinnerComponent } from './_shared/components/loading-spinner/loading-spinner.component';
 
 export function tokenGetter() {
@@ -42,7 +42,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       AdminPanelComponent,
       HasRoleDirective,
       UserManagementComponent,
-      RolesModalComponent,
+      UserEditModalComponent,
       LoadingSpinnerComponent
    ],
    imports: [
@@ -84,7 +84,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       AdminService
    ],
    entryComponents: [
-      RolesModalComponent
+      UserEditModalComponent
    ],
    bootstrap: [
       AppComponent

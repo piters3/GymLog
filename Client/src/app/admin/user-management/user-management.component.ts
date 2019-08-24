@@ -1,62 +1,52 @@
-import { Component, OnInit } from '@angular/core';
-import { User } from '../../_models/user';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { User, Role } from '../../_models/user';
 import { AdminService } from '../../_services/admin.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap';
-import { RolesModalComponent } from '../roles-modal/roles-modal.component';
-import { Observable } from 'rxjs';
+import { UserEditModalComponent } from '../user-edit-modal/user-edit-modal.component';
+import { Observable, Subject } from 'rxjs';
+import { filter, withLatestFrom, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css']
 })
-export class UserManagementComponent implements OnInit {
+export class UserManagementComponent implements OnInit, OnDestroy {
 
   bsModalRef: BsModalRef;
   users$: Observable<User[]>;
+  roles$: Observable<Role[]>;
+  user$: Observable<User>;
   isLoading$: Observable<boolean>;
+  private destroy$: Subject<void> = new Subject();
 
-  constructor(
-    private adminService: AdminService,
-    private modalService: BsModalService) { }
+  constructor(private adminService: AdminService, private modalService: BsModalService) { }
 
   ngOnInit(): void {
-    this.adminService.updateUsers();
-    this.users$ = this.adminService.getUsers;
+    this.adminService.loadUsersWithRoles();
+    this.adminService.loadRoles();
+    this.users$ = this.adminService.getUsersWithRoles;
+    this.roles$ = this.adminService.getRoles;
     this.isLoading$ = this.adminService.getLoading;
+    this.user$ = this.adminService.getUser;
   }
 
-  editRolesModal(user: User) {
-    const initialState = {
-      user,
-      roles: this.getRolesArray(user)
-    };
-    this.bsModalRef = this.modalService.show(RolesModalComponent, {initialState} );
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  private getRolesArray(user: User) {
-    const roles = [];
-    const userRoles = user.roles;
-    const availableRoles: any[] = [
-      { name: 'Admin', value: 'Admin' },
-      { name: 'User', value: 'User' }
-    ];
+  editUser(userId: number) {
+    this.adminService.loadUser(userId);
 
-    for (const ar of availableRoles) {
-      let isMatch = false;
-      for (const ur of userRoles) {
-        if (ar.name === ur) {
-          isMatch = true;
-          ar.checked = true;
-          roles.push(ar);
-          break;
-        }
-      }
-      if (!isMatch) {
-        ar.checked = false;
-        roles.push(ar);
-      }
-    }
-    return roles;
+    this.user$.pipe(
+      filter((user: User) => !!user && user.id === userId),
+      distinctUntilChanged((prev, curr) => prev.id === curr.id),
+      withLatestFrom(this.roles$),
+      takeUntil(this.destroy$)
+    ).subscribe(([user, roles]) => {
+      const initialState = {user, roles};
+      this.bsModalRef = this.modalService.show(UserEditModalComponent, {initialState} );
+    });
   }
 }

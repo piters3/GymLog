@@ -34,6 +34,13 @@ namespace GymLog.API.Data
             return user;
         }
 
+        public async Task<User> GetUserWithRoles(int id)
+        {
+            var user = await _context.Users.Include(u => u.UserRoles).ThenInclude(ur=>ur.Role).FirstOrDefaultAsync(u => u.Id == id);
+
+            return user;
+        }
+
         public async Task<IEnumerable<User>> GetUsers()
         {
             var users = await _context.Users.ToListAsync();

@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using GymLog.API.Data;
 using GymLog.API.Entities;
 using GymLog.API.Models;
@@ -12,18 +14,24 @@ namespace GymLog.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Policy = "RequireAdminRole")]
     public class AdminController : ControllerBase
     {
         private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
+        private readonly IGymLogRepository _repo;
+        private readonly IMapper _mapper;
 
-        public AdminController(DataContext context, UserManager<User> userManager)
+        public AdminController(DataContext context, UserManager<User> userManager, RoleManager<Role> roleManager, IMapper mapper, IGymLogRepository repo)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
+            _mapper = mapper;
+            _repo = repo;
             _context = context;
         }
 
-        [Authorize(Policy = "RequireAdminRole")]
         [HttpGet("usersWithRoles")]
         public async Task<IActionResult> GetUsersWithRoles()
         {
@@ -42,15 +50,32 @@ namespace GymLog.API.Controllers
             return Ok(userList);
         }
 
-        [Authorize(Policy = "RequireAdminRole")]
-        [HttpPost("editRoles/{userName}")]
-        public async Task<IActionResult> EditRoles(string userName, RoleEditModel roleEditDto)
+        [HttpGet("roles")]
+        public async Task<IActionResult> GetRoles()
         {
-            var user = await _userManager.FindByNameAsync(userName);
-            var userRoles = await _userManager.GetRolesAsync(user);
-            var selectedRoles = roleEditDto.RoleNames;
+            var roles = await _roleManager.Roles.ToListAsync();
+            var rolesModel = _mapper.Map<IEnumerable<RoleModel>>(roles);
 
-            selectedRoles = selectedRoles ?? new string[] { };
+            return Ok(rolesModel);
+        }
+
+
+        [HttpGet("getUser/{id}")]
+        public async Task<IActionResult> GetUser(int id)
+        {
+            var user = await _repo.GetUserWithRoles(id);
+            var userToReturn = _mapper.Map<UserDetailsModel>(user);
+
+            return Ok(userToReturn);
+        }
+
+        [HttpPost("updateUser/{id}")]
+        public async Task<IActionResult> UpdateUser(int id, UserDetailsModel userForUpdate)
+        {
+            var user = await _repo.GetUser(id);
+            var userRoles = await _userManager.GetRolesAsync(user);
+            var selectedRoles = userForUpdate.Roles.Select(r => r.Name).ToArray();
+
             var result = await _userManager.AddToRolesAsync(user, selectedRoles.Except(userRoles));
 
             if (!result.Succeeded)
@@ -61,7 +86,10 @@ namespace GymLog.API.Controllers
             if (!result.Succeeded)
                 return BadRequest("Failed to remove the roles");
 
-            return Ok(await _userManager.GetRolesAsync(user));
+            _mapper.Map(userForUpdate, user);
+            await _repo.SaveAll();
+
+            return NoContent();
         }
     }
 }

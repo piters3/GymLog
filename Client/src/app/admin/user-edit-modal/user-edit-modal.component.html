@@ -1,0 +1,94 @@
+<form [formGroup]="form" (submit)="form.dirty && form.valid && onSubmit()">
+
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Edycja użytkownika {{user.userName}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <!-- <pre>{{form.getRawValue() | json}}</pre> -->
+
+    <div class="form-group row">
+      <label for="username" class="col-sm-2 col-form-label col-form-label-sm">Nick</label>
+      <div class="col-sm-10">
+        <input formControlName="username" type="text" class="form-control form-control-sm" placeholder="Nick">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="name" class="col-sm-2 col-form-label col-form-label-sm">Imię</label>
+      <div class="col-sm-10">
+        <input formControlName="name" type="text" class="form-control form-control-sm" placeholder="Imię">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="surname" class="col-sm-2 col-form-label col-form-label-sm">Nazwisko</label>
+      <div class="col-sm-10">
+        <input formControlName="surname" type="text" class="form-control form-control-sm" placeholder="Nazwisko">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="email" class="col-sm-2 col-form-label col-form-label-sm">Email</label>
+      <div class="col-sm-10">
+        <input formControlName="email" type="email" class="form-control form-control-sm" placeholder="Email">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="gender" class="col-sm-2 col-form-label col-form-label-sm">Płeć</label>
+      <div class="col-sm-10">
+        <select formControlName="gender" id="gender" class="form-control form-control-sm">
+          <option value="0">Mężczyzna</option>
+          <option value="1">Kobieta</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="height" class="col-sm-2 col-form-label col-form-label-sm">Wzrost</label>
+      <div class="col-sm-10">
+        <input formControlName="height" type="text" class="form-control form-control-sm" placeholder="Wzrost">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="weight" class="col-sm-2 col-form-label col-form-label-sm">Waga</label>
+      <div class="col-sm-10">
+        <input formControlName="weight" type="text" class="form-control form-control-sm" placeholder="Waga">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="registerDate" class="col-sm-2 col-form-label col-form-label-sm">Data rejestracji</label>
+      <div class="col-sm-10">
+        <input formControlName="registerDate" type="date" class="form-control form-control-sm"
+          placeholder="Data rejestracji">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label for="enabled" class="col-sm-2 col-form-label col-form-label-sm">Czy aktywny?</label>
+      <div class="col-sm-10">
+        <input formControlName="enabled" class="form-check-input" type="checkbox">
+      </div>
+    </div>
+
+    <ng-container formArrayName="roles">
+      <label for="username">Role</label>
+      <div class="form-check" *ngFor="let role of rolesFormControls; index as i">
+        <ng-container [formGroupName]="i">
+          <input formControlName="checked" class="form-check-input" type="checkbox">
+          <label>{{role.value.name}}</label>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" (click)="bsModalRef.hide()">Cancel</button>
+    <button type="submit" [disabled]="form.pristine" class="btn btn-success">Submit</button>
+  </div>
+</form>

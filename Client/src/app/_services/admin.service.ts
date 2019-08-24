@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '../../../node_modules/@angular/common/http';
-import { User } from '../_models/user';
+import { User, Role } from '../_models/user';
 import { Urls } from '../urls';
 import { Observable, BehaviorSubject } from 'rxjs';
 
@@ -9,28 +9,55 @@ import { Observable, BehaviorSubject } from 'rxjs';
 })
 export class AdminService {
 
-  private users: BehaviorSubject<User[]> = new BehaviorSubject([]);
+  private usersWithRoles: BehaviorSubject<User[]> = new BehaviorSubject([]);
+  private user: BehaviorSubject<User> = new BehaviorSubject(null);
+  private roles: BehaviorSubject<Role[]> = new BehaviorSubject([]);
   private loading: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(private http: HttpClient) { }
 
-  get getUsers(): Observable<any> {
-    return this.users.asObservable();
+  get getUsersWithRoles(): Observable<User[]> {
+    return this.usersWithRoles;
   }
 
-  get getLoading(): Observable<any> {
-    return this.loading.asObservable();
+  get getRoles(): Observable<Role[]> {
+    return this.roles;
   }
 
-  updateUsers() {
+  get getUser(): Observable<User> {
+    return this.user;
+  }
+
+
+  get getLoading(): Observable<boolean> {
+    return this.loading;
+  }
+
+  loadUsersWithRoles() {
     this.loading.next(true);
     this.http.get<User[]>(Urls.usersWithRolesUrl).subscribe(res => {
-      this.users.next(res);
+      this.usersWithRoles.next(res);
       this.loading.next(false);
     });
   }
 
-  updateUserRoles(user: User, roles: {}) {
-    return this.http.post(Urls.editUserRolesUrl + user.userName, roles);
+  loadUser(userId: number) {
+    this.loading.next(true);
+    this.http.get<User>(Urls.userUrl + userId).subscribe(res => {
+      this.user.next(res);
+      this.loading.next(false);
+    });
+  }
+
+  loadRoles() {
+    this.loading.next(true);
+    this.http.get<Role[]>(Urls.rolesUrl).subscribe(res => {
+      this.roles.next(res);
+      this.loading.next(false);
+    });
+  }
+
+  updateUser(user: User) {
+    return this.http.post(Urls.updateUserUrl + user.id, user);
   }
 }

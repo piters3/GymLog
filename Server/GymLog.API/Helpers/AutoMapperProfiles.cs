@@ -14,6 +14,11 @@ namespace GymLog.API.Helpers
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Role.Name));
             CreateMap<User, UserDetailsModel>()
                 .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.UserRoles));
+            CreateMap<Role, RoleModel>();
+            CreateMap<User, UserSummary>();
+            CreateMap<UserDetailsModel, User>()
+                .ForMember(dest => dest.UserRoles, opt => opt.Ignore());
+            CreateMap<RoleModel, Role>();
         }
     }
 }
