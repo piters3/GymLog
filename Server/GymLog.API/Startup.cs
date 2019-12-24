@@ -12,14 +12,12 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 
 namespace GymLog.API
 {
@@ -34,6 +32,9 @@ namespace GymLog.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+            services.AddHealthChecks();
+
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             var builder = services.AddIdentityCore<User>(opt =>
@@ -69,16 +70,23 @@ namespace GymLog.API
                 options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User"));
             });
 
-            services.AddMvc(options =>
+            services.AddAuthorization(options =>
             {
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                options.Filters.Add(new AuthorizeFilter(policy));
-            })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-            .AddJsonOptions(opt =>
-            {
-                opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                  .RequireAuthenticatedUser()
+                  .Build();
             });
+
+            //services.AddMvc(options =>
+            //{
+            //    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+            //    options.Filters.Add(new AuthorizeFilter(policy));
+            //})
+            //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+            //.AddJsonOptions(opt =>
+            //{
+            //    opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            //});
             services.AddCors();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<Seed>();
@@ -86,28 +94,28 @@ namespace GymLog.API
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info
+                c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "GymLog API",
                     Description = ".NET Core Web API",
-                    TermsOfService = "None",
-                    Contact = new Contact
+                    TermsOfService = new Uri("http://tempuri.org/terms"),
+                    Contact = new OpenApiContact
                     {
                         Name = "Piotr Strzelecki",
                         Email = "Piotr.Strzelecki93@gmail.com",
-                        Url = "https://www.facebook.com/pioter.strzelecki"
+                        Url = new Uri("https://www.facebook.com/pioter.strzelecki")
                     },
-                    License = new License
+                    License = new OpenApiLicense
                     {
                         Name = "Use under MIT License",
-                        Url = "https://opensource.org/licenses/MIT"
+                        Url = new Uri("https://opensource.org/licenses/MIT")
                     }
                 });
             });
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed seeder)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, Seed seeder)
         {
             if (env.IsDevelopment())
             {
@@ -132,20 +140,30 @@ namespace GymLog.API
             }
 
             seeder.SeedUsers();
-            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-            app.UseAuthentication();
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-            app.UseSwagger();
 
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                //endpoints.MapControllers();
+                endpoints.MapDefaultControllerRoute().RequireAuthorization();
+                endpoints.MapHealthChecks("/health");
+            });
+
+            //app.UseDefaultFiles();
+
+            app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "GymLog API V1");
                 c.RoutePrefix = string.Empty;
-            });
-            app.UseMvc(routes =>
-            {
-                routes.MapSpaFallbackRoute("spa-fallback", new { controller = "Fallback", action = "Index" });
             });
         }
     }

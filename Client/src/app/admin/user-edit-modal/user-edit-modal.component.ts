@@ -56,21 +56,8 @@ export class UserEditModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // const rolesToUpdate = {
-    //   roleNames: this.form.getRawValue().role.filter((item: any) => item.checked).map((item: any) => item.name)
-    // };
-
-    // this.adminService.updateUserRoles(this.user, rolesToUpdate).subscribe(() => {
-    //   this.bsModalRef.hide();
-    //   this.adminService.loadUsers();
-    // }, error => {
-    //   console.log(error);
-    // });
-    // let q = this.form.getRawValue();
-    // let a = this.form.value;
-    const updatedUser = {...this.form.value, id: this.user.id};
-
-    updatedUser.roles =  updatedUser.roles.filter((item: any) => item.checked);
+    const updatedUser = { ...this.form.value, id: this.user.id };
+    updatedUser.roles = updatedUser.roles.filter((item: any) => item.checked);
 
     this.adminService.updateUser(updatedUser).subscribe(() => {
       this.bsModalRef.hide();
