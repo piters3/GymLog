@@ -10,7 +10,11 @@ namespace GymLog.API.Data
     {
         public DataContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<Value> Values { get; set; }
+        public DbSet<Muscle> Muscles { get; set; }
+        public DbSet<Equipment> Equipments { get; set; }
+        public DbSet<Exercise> Exercises { get; set; }
+        public DbSet<Workout> Workouts { get; set; }
+        public DbSet<Daylog> Daylogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -32,12 +36,53 @@ namespace GymLog.API.Data
                     .IsRequired();
             });
 
-            builder.Entity<User>().ToTable("Users");
+            builder.Entity<User>(user =>
+            {
+                user.ToTable("Users");
+                user.Property(x => x.Weight).HasColumnType("decimal(18, 2)");
+                user.Property(x => x.Height).HasColumnType("decimal(18, 2)");
+                user.Property(x => x.Gender).HasConversion<int>();
+                user.HasMany(x => x.Workouts);
+                user.HasMany(x => x.Daylogs);
+            });
+
             builder.Entity<Role>().ToTable("Roles");
             builder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaims");
             builder.Entity<IdentityUserLogin<int>>().ToTable("UserLogins");
             builder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
             builder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
+
+            builder.Entity<Muscle>()
+                .ToTable("Muscle")
+                .HasMany(x => x.Exercises);
+
+            builder.Entity<Equipment>()
+                .ToTable("Equipments")
+                .HasMany(x => x.Exercises);
+
+            builder.Entity<Exercise>()
+                .ToTable("Exercises")
+                .HasMany(x => x.Workouts);
+
+            builder.Entity<Workout>().ToTable("Workouts");
+
+            builder.Entity<Daylog>().ToTable("Daylogs");
+
+            builder.Entity<WorkoutDaylog>(wd =>
+            {
+                wd.ToTable("WorkoutDaylogs");
+                wd.HasKey(x => new { x.WorkoutId, x.DaylogId });
+
+                wd.HasOne(x => x.Workout)
+                    .WithMany(d => d.WorkoutDaylogs)
+                    .HasForeignKey(x => x.WorkoutId)
+                    .IsRequired();
+
+                wd.HasOne(x => x.Daylog)
+                    .WithMany(d => d.WorkoutDaylogs)
+                    .HasForeignKey(x => x.DaylogId)
+                    .IsRequired();
+            });
         }
     }
 }

@@ -35,38 +35,34 @@ namespace GymLog.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterModel registerModel)
+        public async Task<IActionResult> Register(RegisterDto registerDto)
         {
-            var user = _mapper.Map<User>(registerModel);
-
-            user.Enabled = true;
-            user.RegisterDate = DateTime.Now;
-
-            var result = await _userManager.CreateAsync(user, registerModel.Password);
+            var user = _mapper.Map<User>(registerDto);
+            var result = await _userManager.CreateAsync(user, registerDto.Password);
 
             if (result.Succeeded)
             {
                 result = await _userManager.AddToRoleAsync(user, "User");
                 if (result.Succeeded)
                 {
-                    var userToReturn = _mapper.Map<UserDetailsModel>(user);
+                    var userToReturn = _mapper.Map<UserDetailsDto>(user);
                     return CreatedAtRoute("GetUser", new { controller = "Users", id = user.Id }, userToReturn);
-                }    
+                }
             }
 
             return BadRequest(result.Errors);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginModel loginModel)
+        public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            var user = await _userManager.FindByNameAsync(loginModel.Username);
-            var result = await _signInManager.CheckPasswordSignInAsync(user, loginModel.Password, false);
+            var user = await _userManager.FindByNameAsync(loginDto.Username);
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (result.Succeeded)
             {
-                var appUser = await _userManager.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == loginModel.Username.ToUpper());
-                var userToReturn = _mapper.Map<UserSummary>(appUser);
+                var appUser = await _userManager.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == loginDto.Username.ToUpper());
+                var userToReturn = _mapper.Map<UserSummaryDto>(appUser);
 
                 return Ok(new
                 {

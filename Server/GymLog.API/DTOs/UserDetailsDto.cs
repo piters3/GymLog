@@ -4,7 +4,7 @@ using GymLog.API.Entities;
 
 namespace GymLog.API.Models
 {
-    public class UserDetailsModel
+    public class UserDetailsDto
     {
         public int Id { get; set; }
         public string UserName { get; set; }
@@ -16,6 +16,6 @@ namespace GymLog.API.Models
         public decimal Weight { get; set; }
         public decimal Height { get; set; }
         public DateTime RegisterDate { get; set; }
-        public ICollection<RoleModel> Roles { get; set; }
+        public ICollection<RoleDto> Roles { get; set; }
     }
 }

@@ -1,22 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+using GymLog.API.Exceptions;
 using Microsoft.AspNetCore.Identity;
 
 namespace GymLog.API.Entities
 {
     public class User : IdentityUser<int>
     {
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public bool Enabled { get; set; }
-        public Gender Gender { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Weight { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Height { get; set; }
-        public DateTime RegisterDate { get; set; }
-        public ICollection<UserRole> UserRoles { get; set; }
+        public string Name { get; private set; }
+        public string Surname { get; private set; }
+        public bool Enabled { get; private set; }
+        public Gender Gender { get; private set; }
+        public decimal Weight { get; private set; }
+        public decimal Height { get; private set; }
+        public DateTime RegisterDate { get; private set; }
+        public IEnumerable<UserRole> UserRoles { get; private set; }
+        public IEnumerable<Workout> Workouts { get; private set; }
+        public IEnumerable<Daylog> Daylogs { get; private set; }
+
+        public User()
+        {
+            Enabled = true;
+            RegisterDate = DateTime.UtcNow;
+        }
+
+        public User(string name, string surname, decimal weight, decimal height, Gender gender)
+        {
+            SetName(name);
+            SetSurname(surname);
+            SetWeight(weight);
+            SetHeight(height);
+            Gender = gender;
+            Enabled = true;
+            RegisterDate = DateTime.UtcNow;
+        }
+
+        private void SetName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                throw new GymLogException(ExceptionCode.EmptyProperty, "User name cannot be empty.");
+
+            Name = name.Trim().ToLowerInvariant();
+        }
+
+        private void SetSurname(string surmame)
+        {
+            if (string.IsNullOrEmpty(surmame))
+                throw new GymLogException(ExceptionCode.EmptyProperty, "User surname cannot be empty.");
+
+            Surname = surmame.Trim().ToLowerInvariant();
+        }
+
+        private void SetWeight(decimal weight)
+        {
+            if (weight <= decimal.Zero)
+                throw new GymLogException(ExceptionCode.InvalidNumber, "Weight cannot be zero or negative.");
+
+            Weight = weight;
+        }
+
+        private void SetHeight(decimal height)
+        {
+            if (height <= decimal.Zero)
+                throw new GymLogException(ExceptionCode.InvalidNumber, "Height cannot be zero or negative.");
+
+            Height = height;
+        }
     }
 
     public enum Gender

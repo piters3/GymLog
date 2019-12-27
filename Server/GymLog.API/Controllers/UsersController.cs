@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using GymLog.API.Data;
 using GymLog.API.Models;
+using GymLog.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GymLog.API.Controllers
@@ -11,22 +11,37 @@ namespace GymLog.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IGymLogRepository _repo;
+        private readonly IUsersRepository _repo;
         private readonly IMapper _mapper;
 
-        public UsersController(IGymLogRepository repo, IMapper mapper)
+        public UsersController(IUsersRepository repo, IMapper mapper)
         {
             _mapper = mapper;
             _repo = repo;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> Get()
         {
             var users = await _repo.GetUsers();
-            var usersToReturn = _mapper.Map<IEnumerable<UserDetailsModel>>(users);
+            var usersToReturn = _mapper.Map<IEnumerable<UserDetailsDto>>(users);
 
             return Ok(usersToReturn);
+        }
+
+        [HttpGet("{id}", Name = "GetUser")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var user = await _repo.GetUser(id);
+
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            var userToReturn = _mapper.Map<UserDetailsDto>(user);
+
+            return Ok(userToReturn);
         }
 
 

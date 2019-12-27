@@ -8,17 +8,18 @@ namespace GymLog.API.Helpers
     {
         public AutoMapperProfiles()
         {
-            CreateMap<RegisterModel, User>();
-            CreateMap<UserRole, RoleModel>()
+            CreateMap<RegisterDto, User>()
+                .ConstructUsing(x => new User());
+            CreateMap<UserRole, RoleDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Role.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Role.Name));
-            CreateMap<User, UserDetailsModel>()
+            CreateMap<User, UserDetailsDto>()
                 .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.UserRoles));
-            CreateMap<Role, RoleModel>();
-            CreateMap<User, UserSummary>();
-            CreateMap<UserDetailsModel, User>()
+            CreateMap<Role, RoleDto>();
+            CreateMap<User, UserSummaryDto>();
+            CreateMap<UserDetailsDto, User>()
                 .ForMember(dest => dest.UserRoles, opt => opt.Ignore());
-            CreateMap<RoleModel, Role>();
+            CreateMap<RoleDto, Role>();
         }
     }
 }

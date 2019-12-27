@@ -5,6 +5,7 @@ using AutoMapper;
 using GymLog.API.Data;
 using GymLog.API.Entities;
 using GymLog.API.Helpers;
+using GymLog.API.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -90,7 +91,9 @@ namespace GymLog.API
             services.AddCors();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<Seed>();
-            services.AddScoped<IGymLogRepository, GymLogRepository>();
+            services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddTransient(typeof(IEFRepository<>), typeof(EFRepository<>));
+            services.AddScoped<IMusclesRepository, MusclesRepository>();
 
             services.AddSwaggerGen(c =>
             {
@@ -152,8 +155,7 @@ namespace GymLog.API
 
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapControllers();
-                endpoints.MapDefaultControllerRoute().RequireAuthorization();
+                endpoints.MapControllers().RequireAuthorization();
                 endpoints.MapHealthChecks("/health");
             });
 
