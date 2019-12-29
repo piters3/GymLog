@@ -18,5 +18,14 @@ namespace GymLog.API.Repositories
 
         public async Task<Muscle> GetAsync(int id)
             => await _repository.GetAsync(id);
+
+        public async Task AddAsync(Muscle entity)
+            => await _repository.AddAsync(entity);
+
+        public async Task UpdateAsync(Muscle entity)
+            => await _repository.UpdateAsync(entity);
+
+        public async Task DeleteAsync(Muscle entity)
+            => await _repository.DeleteAsync(entity);
     }
 }

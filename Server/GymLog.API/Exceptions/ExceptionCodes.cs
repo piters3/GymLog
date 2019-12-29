@@ -4,6 +4,7 @@
     {
         EmptyProperty,
         EmptyCollection,
-        InvalidNumber
+        InvalidNumber,
+        NullReference
     }
 }

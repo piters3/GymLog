@@ -53,8 +53,7 @@ namespace GymLog.API.Data
             builder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
 
             builder.Entity<Muscle>()
-                .ToTable("Muscle")
-                .HasMany(x => x.Exercises);
+                .ToTable("Muscle");
 
             builder.Entity<Equipment>()
                 .ToTable("Equipments")

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using GymLog.API.Entities;
 
-namespace GymLog.API.Models
+namespace GymLog.API.DTOs
 {
     public class UserDetailsDto
     {

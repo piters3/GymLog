@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using GymLog.API.Models;
+using GymLog.API.DTOs;
 using GymLog.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

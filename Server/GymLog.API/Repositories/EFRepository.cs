@@ -30,7 +30,10 @@ namespace GymLog.API.Repositories
             => await Context.Set<T>().Where(predicate).ToListAsync();
 
         public async Task AddAsync(T entity)
-            => await Context.AddAsync(entity);
+        {
+            await Context.AddAsync(entity);
+            await Context.SaveChangesAsync();
+        }
 
         public async Task UpdateAsync(T entity)
         {
@@ -44,6 +47,7 @@ namespace GymLog.API.Repositories
             await Context.SaveChangesAsync();
         }
 
-        public Task<int> CountAsync() => Context.Set<T>().CountAsync();
+        public async Task<int> CountAsync()
+            => await Context.Set<T>().CountAsync();
     }
 }

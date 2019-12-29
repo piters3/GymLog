@@ -7,6 +7,7 @@ namespace GymLog.API.Entities
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
+        public Equipment Equipment { get; private set; }
 
         public IEnumerable<Workout> Workouts { get; private set; }
 
@@ -14,6 +15,7 @@ namespace GymLog.API.Entities
         {
             SetName(name);
             SetDescription(description);
+            //SetEquipment(equipment);
         }
 
         private void SetName(string name)
@@ -33,5 +35,14 @@ namespace GymLog.API.Entities
             Name = description.Trim().ToLowerInvariant();
             SetUpdatedDate();
         }
+
+        //private void SetEquipment(Equipment equipment)
+        //{
+        //    if (equipment is null)
+        //        throw new GymLogException(ExceptionCode.NullReference, "Exercise equipment cannot be null.");
+
+        //    Equipment = equipment;
+        //    SetUpdatedDate();
+        //}
     }
 }

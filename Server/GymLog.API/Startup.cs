@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Reflection;
+using System.IO;
 using System.Net;
 using System.Text;
 using AutoMapper;
@@ -115,6 +117,10 @@ namespace GymLog.API
                         Url = new Uri("https://opensource.org/licenses/MIT")
                     }
                 });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 

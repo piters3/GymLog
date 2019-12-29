@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace GymLog.API.Models
+namespace GymLog.API.DTOs
 {
     public class RegisterDto
     {

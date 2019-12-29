@@ -1,6 +1,6 @@
 using AutoMapper;
+using GymLog.API.DTOs;
 using GymLog.API.Entities;
-using GymLog.API.Models;
 
 namespace GymLog.API.Helpers
 {
@@ -20,6 +20,8 @@ namespace GymLog.API.Helpers
             CreateMap<UserDetailsDto, User>()
                 .ForMember(dest => dest.UserRoles, opt => opt.Ignore());
             CreateMap<RoleDto, Role>();
+            CreateMap<Muscle, MuscleDto>();
+            CreateMap<MuscleDto, Muscle>();
         }
     }
 }
