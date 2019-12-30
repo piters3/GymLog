@@ -103,6 +103,8 @@ namespace GymLog.API.Controllers
             if (muscle is null)
                 return NotFound();
 
+            _mapper.Map(muscleDto, muscle);
+
             await _musclesRepository.UpdateAsync(muscle);
 
             return Accepted();
@@ -112,8 +114,8 @@ namespace GymLog.API.Controllers
         /// Deletes muscle by Id
         /// </summary>
         /// <param name="id"></param>  
-        /// <response code="202">Returns collection of Muscle</response>
-        /// <response code="404">If the collection is empty</response>  
+        /// <response code="202">Successful delete</response>
+        /// <response code="404">Muscle not found</response>  
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status202Accepted)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

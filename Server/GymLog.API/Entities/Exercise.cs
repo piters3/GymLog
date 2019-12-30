@@ -8,14 +8,21 @@ namespace GymLog.API.Entities
         public string Name { get; private set; }
         public string Description { get; private set; }
         public Equipment Equipment { get; private set; }
+        public Muscle Muscle { get; private set; }
 
         public IEnumerable<Workout> Workouts { get; private set; }
 
-        public Exercise(string name, string description)
+        private Exercise()
+        {
+
+        }
+
+        public Exercise(string name, string description, Muscle muscle, Equipment equipment)
         {
             SetName(name);
             SetDescription(description);
-            //SetEquipment(equipment);
+            SetMuscle(muscle);
+            SetEquipment(equipment);
         }
 
         private void SetName(string name)
@@ -32,17 +39,26 @@ namespace GymLog.API.Entities
             if (string.IsNullOrEmpty(description))
                 throw new GymLogException(ExceptionCode.EmptyProperty, "Exercise description cannot be empty.");
 
-            Name = description.Trim().ToLowerInvariant();
+            Description = description.Trim().ToLowerInvariant();
             SetUpdatedDate();
         }
 
-        //private void SetEquipment(Equipment equipment)
-        //{
-        //    if (equipment is null)
-        //        throw new GymLogException(ExceptionCode.NullReference, "Exercise equipment cannot be null.");
+        private void SetEquipment(Equipment equipment)
+        {
+            if (equipment is null)
+                throw new GymLogException(ExceptionCode.NullReference, "Exercise equipment cannot be null.");
 
-        //    Equipment = equipment;
-        //    SetUpdatedDate();
-        //}
+            Equipment = equipment;
+            SetUpdatedDate();
+        }
+
+        private void SetMuscle(Muscle muscle)
+        {
+            if (muscle is null)
+                throw new GymLogException(ExceptionCode.NullReference, "Exercise muscle cannot be null.");
+
+            Muscle = muscle;
+            SetUpdatedDate();
+        }
     }
 }

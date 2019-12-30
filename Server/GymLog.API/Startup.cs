@@ -148,7 +148,7 @@ namespace GymLog.API
                 });
             }
 
-            seeder.SeedUsers();
+            //seeder.Run();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

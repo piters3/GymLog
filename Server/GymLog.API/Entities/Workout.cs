@@ -8,14 +8,23 @@ namespace GymLog.API.Entities
         public int Sets { get; private set; }
         public int Reps { get; private set; }
         public int Weight { get; private set; }
+        public Exercise Exercise { get; private set; }
+        public User User { get; private set; }
 
         public IEnumerable<WorkoutDaylog> WorkoutDaylogs { get; private set; }
 
-        public Workout(int sets, int reps, int weight)
+        private Workout()
+        {
+
+        }
+
+        public Workout(int sets, int reps, int weight, User user, Exercise exercise)
         {
             SetSets(sets);
             SetReps(reps);
             SetWeight(weight);
+            SetUser(user);
+            SetExercise(exercise);
         }
 
         private void SetSets(int sets)
@@ -48,6 +57,24 @@ namespace GymLog.API.Entities
             }
 
             Weight = weight;
+            SetUpdatedDate();
+        }
+
+        private void SetUser(User user)
+        {
+            if (user is null)
+                throw new GymLogException(ExceptionCode.NullReference, "Workout user cannot be null.");
+
+            User = user;
+            SetUpdatedDate();
+        }
+
+        private void SetExercise(Exercise exercise)
+        {
+            if (exercise is null)
+                throw new GymLogException(ExceptionCode.NullReference, "Workout exercise cannot be null.");
+
+            Exercise = exercise;
             SetUpdatedDate();
         }
     }

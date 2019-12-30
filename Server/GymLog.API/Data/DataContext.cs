@@ -15,6 +15,7 @@ namespace GymLog.API.Data
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<Daylog> Daylogs { get; set; }
+        public DbSet<WorkoutDaylog> WorkoutDaylogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -53,7 +54,8 @@ namespace GymLog.API.Data
             builder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
 
             builder.Entity<Muscle>()
-                .ToTable("Muscle");
+                .ToTable("Muscle")
+                .HasMany(x => x.Exercises);
 
             builder.Entity<Equipment>()
                 .ToTable("Equipments")
