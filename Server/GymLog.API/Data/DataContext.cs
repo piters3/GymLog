@@ -40,8 +40,8 @@ namespace GymLog.API.Data
             builder.Entity<User>(user =>
             {
                 user.ToTable("Users");
-                user.Property(x => x.Weight).HasColumnType("decimal(18, 2)");
-                user.Property(x => x.Height).HasColumnType("decimal(18, 2)");
+                user.Property(x => x.Weight);
+                user.Property(x => x.Height);
                 user.Property(x => x.Gender).HasConversion<int>();
                 user.HasMany(x => x.Workouts);
                 user.HasMany(x => x.Daylogs);

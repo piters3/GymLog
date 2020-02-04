@@ -13,8 +13,8 @@ namespace GymLog.API.DTOs
         public string Email { get; set; }
         public bool Enabled { get; set; }
         public Gender Gender { get; set; }
-        public decimal Weight { get; set; }
-        public decimal Height { get; set; }
+        public int Weight { get; set; }
+        public int Height { get; set; }
         public DateTime RegisterDate { get; set; }
         public ICollection<RoleDto> Roles { get; set; }
     }

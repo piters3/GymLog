@@ -90,7 +90,7 @@ namespace GymLog.API.Controllers
             _mapper.Map(userForUpdate, user);
             await _repo.SaveAllAsync();
 
-            return NoContent();
+            return Accepted();
         }
     }
 }

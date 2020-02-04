@@ -11,8 +11,8 @@ namespace GymLog.API.Entities
         public string Surname { get; private set; }
         public bool Enabled { get; private set; }
         public Gender Gender { get; private set; }
-        public decimal Weight { get; private set; }
-        public decimal Height { get; private set; }
+        public int Weight { get; private set; }
+        public int Height { get; private set; }
         public DateTime RegisterDate { get; private set; }
         public IEnumerable<UserRole> UserRoles { get; private set; }
         public IEnumerable<Workout> Workouts { get; private set; }
@@ -24,7 +24,7 @@ namespace GymLog.API.Entities
             RegisterDate = DateTime.UtcNow;
         }
 
-        public User(string name, string surname, decimal weight, decimal height, Gender gender)
+        public User(string name, string surname, int weight, int height, Gender gender)
         {
             SetName(name);
             SetSurname(surname);
@@ -51,17 +51,17 @@ namespace GymLog.API.Entities
             Surname = surmame.Trim().ToLowerInvariant();
         }
 
-        private void SetWeight(decimal weight)
+        private void SetWeight(int weight)
         {
-            if (weight <= decimal.Zero)
+            if (weight <= 0)
                 throw new GymLogException(ExceptionCode.InvalidNumber, "Weight cannot be zero or negative.");
 
             Weight = weight;
         }
 
-        private void SetHeight(decimal height)
+        private void SetHeight(int height)
         {
-            if (height <= decimal.Zero)
+            if (height <= 0)
                 throw new GymLogException(ExceptionCode.InvalidNumber, "Height cannot be zero or negative.");
 
             Height = height;
