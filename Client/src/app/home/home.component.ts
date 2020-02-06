@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../_services/auth.service';
 
 
 @Component({
@@ -10,7 +11,7 @@ import { TranslateService } from '@ngx-translate/core';
 export class HomeComponent implements OnInit {
   registerMode = false;
 
-  constructor(public i18n: TranslateService) {
+  constructor(public i18n: TranslateService, public authService: AuthService) {
   }
 
   ngOnInit() {

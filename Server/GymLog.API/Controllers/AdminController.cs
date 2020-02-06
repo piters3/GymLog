@@ -60,7 +60,6 @@ namespace GymLog.API.Controllers
             return Ok(rolesModel);
         }
 
-
         [HttpGet("getUser/{id}")]
         public async Task<IActionResult> GetUser(int id)
         {

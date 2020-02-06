@@ -22,6 +22,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using GymLog.API.Converters;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace GymLog.API
 {
@@ -36,9 +39,14 @@ namespace GymLog.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddHealthChecks();
+            services.AddControllers().AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+                opt.JsonSerializerOptions.Converters.Add(new IntConverter());
+            });
 
+            services.AddHealthChecks();
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             var builder = services.AddIdentityCore<User>(opt =>
@@ -81,16 +89,6 @@ namespace GymLog.API
                   .Build();
             });
 
-            //services.AddMvc(options =>
-            //{
-            //    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-            //    options.Filters.Add(new AuthorizeFilter(policy));
-            //})
-            //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-            //.AddJsonOptions(opt =>
-            //{
-            //    opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            //});
             services.AddCors();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<Seed>();
@@ -148,7 +146,7 @@ namespace GymLog.API
                     });
                 });
             }
- 
+
             app.UseSerilogRequestLogging();
             //seeder.Run();
 

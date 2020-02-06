@@ -2,22 +2,32 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+
+  constructor(private toastr: ToastrService) {
+  }
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
+        if (error.status === 401)
           return throwError(error.statusText);
-        }
+
         const applicationError = error.headers.get('Application-Error');
-        if (applicationError) {
-          console.error(applicationError);
+
+        if (applicationError)
           return throwError(applicationError);
-        }
-        const serverError = error.error.errors;
+
+        let serverError = error.error.errors;
+
+        if (!serverError)
+          serverError = error.error;
+
         let modalStateErrors = '';
+
         if (serverError && typeof serverError === 'object') {
           for (const key in serverError) {
             if (serverError[key]) {
@@ -25,7 +35,11 @@ export class ErrorInterceptor implements HttpInterceptor {
             }
           }
         }
-        return throwError(modalStateErrors || serverError || 'Server Error');
+
+        const resultError = modalStateErrors || serverError || 'Server Error';
+        this.toastr.error(resultError);
+
+        return throwError(resultError);
       })
     );
   }

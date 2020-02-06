@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '../../../node_modules/@angular/common/http';
-import { User, Role } from '../_models/user';
+import { User } from '../_models/user';
 import { Urls } from '../urls';
 import { Observable, BehaviorSubject } from 'rxjs';
+import { Role } from '../_models/role';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +28,6 @@ export class AdminService {
   get getUser(): Observable<User> {
     return this.user;
   }
-
 
   get getLoading(): Observable<boolean> {
     return this.loading;

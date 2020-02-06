@@ -1,18 +1,34 @@
-<form #registerForm="ngForm" (ngSubmit)="register()">
+<form [formGroup]="form" (ngSubmit)="register()">
   <h2 class="text-center text-primary">Sign Up</h2>
   <hr>
 
   <div class="form-group">
-    <input type="text" class="form-control" required name="username" [(ngModel)]="model.username" placeholder="Username">
+    <input type="text" [ngClass]="{'is-invalid': usernameForm.errors && usernameForm.touched}"
+      class="form-control" formControlName="username" placeholder="Username"/>
+    <div class="invalid-feedback">Please choose a username</div>
   </div>
 
   <div class="form-group">
-    <input type="password" class="form-control" required name="password" [(ngModel)]="model.password" placeholder="Password">
+    <input type="password" [ngClass]="{'is-invalid': passwordForm.errors && passwordForm.touched}" class="form-control"
+      formControlName="password" placeholder="Password">
+    <div class="invalid-feedback" *ngIf="passwordForm.hasError('required') && passwordForm.touched">Password is required</div>
+    <div class="invalid-feedback" *ngIf="passwordForm.hasError('minlength') && passwordForm.touched">Password must be at least 4 characters</div>
+    <div class="invalid-feedback" *ngIf="passwordForm.hasError('maxlength') && passwordForm.touched">Password cannot exceed 8 characters</div>
+  </div>
+
+  <div class="form-group">
+    <input [ngClass]="{'is-invalid': (confirmPasswordForm.errors && confirmPasswordForm.touched) || (confirmPasswordForm.touched && form.hasError('mismatch'))}"
+      type="password" class="form-control" formControlName="confirmPassword" placeholder="Confirm Password"/>
+    <div class="invalid-feedback" *ngIf=" form.get('confirmPassword').hasError('required') && form.get('confirmPassword').touched">
+      Confirm Password is required
+    </div>
+    <div class="invalid-feedback" *ngIf="form.hasError('mismatch') && form.get('confirmPassword').touched">Passwords must match</div>
   </div>
 
   <div class="form-group text-center">
-    <button class="btn btn-success" type="submit">Register</button>
+    <button class="btn btn-success" type="submit" [disabled]="!form.valid">Register</button>
     <button class="btn btn-default" type="button" (click)="cancel()">Cancel</button>
   </div>
-  
+  <pre>{{form.getRawValue() | json}}</pre>
+  <pre>{{form.status}}</pre>
 </form>

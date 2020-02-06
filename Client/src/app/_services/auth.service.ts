@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { User } from '../_models/user';
 import { Urls } from '../urls';
+import { UserRegisterModel } from '../_models/userRegisterModel';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class AuthService {
     );
   }
 
-  register(user: User) {
+  register(user: UserRegisterModel) {
     return this.http.post(Urls.registerUrl, user);
   }
 
@@ -38,7 +39,7 @@ export class AuthService {
     return !this.jwtHelper.isTokenExpired(token);
   }
 
-  roleMatch(allowedRoles): boolean {
+  roleMatch(allowedRoles: string[]): boolean {
     let isMatch = false;
     const userRoles = this.decodedToken.role as Array<string>;
     allowedRoles.forEach(element => {

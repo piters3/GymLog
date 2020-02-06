@@ -1,3 +1,5 @@
+import { Role } from './role';
+
 export interface User {
   id: number;
   name: string;
@@ -10,11 +12,6 @@ export interface User {
   height: number;
   registerDate: Date;
   roles?: Role[];
-}
-
-export interface Role {
-  id: number;
-  name: string;
 }
 
 export enum Gender {

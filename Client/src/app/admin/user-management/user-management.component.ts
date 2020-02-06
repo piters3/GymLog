@@ -1,10 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User, Role } from '../../_models/user';
+import { User } from '../../_models/user';
 import { AdminService } from '../../_services/admin.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap';
 import { UserEditModalComponent } from '../user-edit-modal/user-edit-modal.component';
 import { Observable, Subject } from 'rxjs';
 import { filter, withLatestFrom, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { Role } from 'src/app/_models/role';
 
 @Component({
   selector: 'app-user-management',
@@ -45,8 +46,8 @@ export class UserManagementComponent implements OnInit, OnDestroy {
       withLatestFrom(this.roles$),
       takeUntil(this.destroy$)
     ).subscribe(([user, roles]) => {
-      const initialState = {user, roles};
-      this.bsModalRef = this.modalService.show(UserEditModalComponent, {initialState} );
+      const initialState = { user, roles };
+      this.bsModalRef = this.modalService.show(UserEditModalComponent, { initialState });
     });
   }
 }
