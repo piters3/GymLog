@@ -1,4 +1,5 @@
-export interface UserRegisterModel {
+export interface RegisterModel {
   username: string;
   password: string;
+  confirmPassword: string;
 }

@@ -37,6 +37,9 @@ namespace GymLog.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
+            if (!registerDto.Password.Equals(registerDto.ConfirmPassword, StringComparison.Ordinal))
+                return BadRequest("The passwords do not match");
+
             var user = _mapper.Map<User>(registerDto);
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
@@ -57,6 +60,10 @@ namespace GymLog.API.Controllers
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
             var user = await _userManager.FindByNameAsync(loginDto.Username);
+
+            if (user is null)
+                return NotFound("User does not exist");
+
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (result.Succeeded)
