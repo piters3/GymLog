@@ -9,4 +9,5 @@ export class Urls {
     static usersWithRolesUrl = environment.apiUrl + 'admin/userswithroles';
     static updateUserUrl = environment.apiUrl + 'admin/updateuser/';
     static rolesUrl = environment.apiUrl + 'admin/roles/';
+    static musclesUrl = environment.apiUrl + 'muscles/';
 }

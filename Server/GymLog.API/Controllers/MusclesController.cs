@@ -4,6 +4,7 @@ using AutoMapper;
 using GymLog.API.DTOs;
 using GymLog.API.Entities;
 using GymLog.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace GymLog.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "RequireAdminRole")]
     public class MusclesController : ControllerBase
     {
         private readonly IMusclesRepository _musclesRepository;

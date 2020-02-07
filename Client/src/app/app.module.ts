@@ -12,18 +12,19 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
-import { AuthService } from './_services/auth.service';
-import { ErrorInterceptorProvider } from './_services/error.interceptor';
+import { AuthService } from './nav/services/auth.service';
+import { ErrorInterceptorProvider } from './_interceptors/error.interceptor';
 import { AuthGuard } from './_guards/auth.guard';
-import { UserService } from './_services/user.service';
 import { HomeComponent } from './home/home.component';
 import { RegisterComponent } from './register/register.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { HasRoleDirective } from './_directives/hasRole.directive';
 import { UserManagementComponent } from './admin/user-management/user-management.component';
-import { AdminService } from './_services/admin.service';
-import { UserEditModalComponent } from './admin/user-edit-modal/user-edit-modal.component';
+import { AdminService } from './admin/user-management/services/admin.service';
+import { UserEditModalComponent } from './admin/user-management/modals/user-edit-modal/user-edit-modal.component';
 import { LoadingSpinnerComponent } from './_shared/components/loading-spinner/loading-spinner.component';
+import { MusclesComponent } from './admin/muscles/muscles.component';
+import { MuscleEditModalComponent } from './admin/muscles/modals/muscle-edit-modal/muscle-edit-modal/muscle-edit-modal.component';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -43,7 +44,9 @@ export function HttpLoaderFactory(http: HttpClient) {
       HasRoleDirective,
       UserManagementComponent,
       UserEditModalComponent,
-      LoadingSpinnerComponent
+      MuscleEditModalComponent,
+      LoadingSpinnerComponent,
+      MusclesComponent
    ],
    imports: [
       BrowserModule,
@@ -82,11 +85,11 @@ export function HttpLoaderFactory(http: HttpClient) {
       AuthService,
       ErrorInterceptorProvider,
       AuthGuard,
-      UserService,
       AdminService
    ],
    entryComponents: [
-      UserEditModalComponent
+      UserEditModalComponent,
+      MuscleEditModalComponent
    ],
    bootstrap: [
       AppComponent

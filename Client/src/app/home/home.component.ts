@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AuthService } from '../_services/auth.service';
+import { AuthService } from '../nav/services/auth.service';
 
 
 @Component({

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsDatepickerConfig } from 'ngx-bootstrap';
-import { User } from '../../_models/user';
+import { User } from '../../../../_models/user';
 import { FormGroup, FormBuilder, FormArray, AbstractControl, Validators } from '@angular/forms';
-import { AdminService } from 'src/app/_services/admin.service';
+import { AdminService } from 'src/app/admin/user-management/services/admin.service';
 import { Role } from 'src/app/_models/role';
 
 @Component({

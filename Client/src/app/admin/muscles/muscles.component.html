@@ -1,0 +1,23 @@
+<ng-container *ngIf="!(isLoading$ | async); else loading">
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let muscle of muscles$ | async">
+        <td>{{muscle.id}}</td>
+        <td>{{muscle.name}}</td>
+        <td><button class="btn btn-info" (click)="editMuscle(muscle.id)">Edit</button></td>
+        <td><button class="btn btn-danger" (click)="delete(muscle.id)">Delete</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- <pre>{{muscles$ | async | json}}</pre> -->
+</ng-container>
+
+<ng-template #loading>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>

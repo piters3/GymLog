@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AuthService } from '../_services/auth.service';
+import { AuthService } from '../nav/services/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { CustomValidators } from '../_shared/custom-validators/custom-validators';
