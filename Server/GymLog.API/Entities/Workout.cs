@@ -35,7 +35,6 @@ namespace GymLog.API.Entities
             }
 
             Sets = sets;
-            SetUpdatedDate();
         }
 
         private void SetReps(int reps)
@@ -46,7 +45,6 @@ namespace GymLog.API.Entities
             }
 
             Reps = reps;
-            SetUpdatedDate();
         }
 
         private void SetWeight(int weight)
@@ -57,7 +55,6 @@ namespace GymLog.API.Entities
             }
 
             Weight = weight;
-            SetUpdatedDate();
         }
 
         private void SetUser(User user)
@@ -66,7 +63,6 @@ namespace GymLog.API.Entities
                 throw new GymLogException(ExceptionCode.NullReference, "Workout user cannot be null.");
 
             User = user;
-            SetUpdatedDate();
         }
 
         private void SetExercise(Exercise exercise)
@@ -75,7 +71,6 @@ namespace GymLog.API.Entities
                 throw new GymLogException(ExceptionCode.NullReference, "Workout exercise cannot be null.");
 
             Exercise = exercise;
-            SetUpdatedDate();
         }
     }
 }

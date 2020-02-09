@@ -36,10 +36,6 @@ namespace GymLog.API.Controllers
         public async Task<IActionResult> Get()
         {
             var muscles = await _musclesRepository.GetAllAsync();
-
-            if (muscles is null || muscles.Count == 0)
-                return NotFound();
-
             var result = _mapper.Map<IEnumerable<MuscleDto>>(muscles);
 
             return Ok(result);

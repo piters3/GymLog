@@ -31,7 +31,6 @@ namespace GymLog.API.Entities
                 throw new GymLogException(ExceptionCode.EmptyProperty, "Exercise name cannot be empty.");
 
             Name = name.Trim().ToLowerInvariant();
-            SetUpdatedDate();
         }
 
         private void SetDescription(string description)
@@ -40,7 +39,6 @@ namespace GymLog.API.Entities
                 throw new GymLogException(ExceptionCode.EmptyProperty, "Exercise description cannot be empty.");
 
             Description = description.Trim().ToLowerInvariant();
-            SetUpdatedDate();
         }
 
         private void SetEquipment(Equipment equipment)
@@ -49,7 +47,6 @@ namespace GymLog.API.Entities
                 throw new GymLogException(ExceptionCode.NullReference, "Exercise equipment cannot be null.");
 
             Equipment = equipment;
-            SetUpdatedDate();
         }
 
         private void SetMuscle(Muscle muscle)
@@ -58,7 +55,6 @@ namespace GymLog.API.Entities
                 throw new GymLogException(ExceptionCode.NullReference, "Exercise muscle cannot be null.");
 
             Muscle = muscle;
-            SetUpdatedDate();
         }
     }
 }

@@ -28,7 +28,6 @@ namespace GymLog.API.Entities
                 throw new GymLogException(ExceptionCode.NullReference, "Daylog user cannot be null.");
 
             User = user;
-            SetUpdatedDate();
         }
     }
 }

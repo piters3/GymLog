@@ -21,7 +21,6 @@ namespace GymLog.API.Entities
                 throw new GymLogException(ExceptionCode.EmptyProperty, "Equipment name cannot be empty.");
 
             Name = name.Trim().ToLowerInvariant();
-            SetUpdatedDate();
         }
 
         private void SetExcercises(IEnumerable<Exercise> exercises)

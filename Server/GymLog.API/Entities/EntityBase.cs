@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace GymLog.API.Entities
 {
@@ -6,14 +7,22 @@ namespace GymLog.API.Entities
     {
         public int Id { get; protected set; }
         public DateTime CreatedDate { get; protected set; }
+        public string CreatedBy { get; protected set; }
         public DateTime UpdatedDate { get; protected set; }
+        public string UpdatedBy { get; protected set; }
 
-        protected EntityBase()
+        public virtual void SetAuditProperties(EntityState state, string username)
         {
-            CreatedDate = DateTime.UtcNow;
-            SetUpdatedDate();
-        }
+            var now = DateTime.UtcNow;
 
-        protected virtual void SetUpdatedDate() => UpdatedDate = DateTime.UtcNow;
+            if (state == EntityState.Added)
+            {
+                CreatedBy = username ?? "unknown";
+                CreatedDate = now;
+            }
+
+            UpdatedBy = username ?? "unknown";
+            UpdatedDate = now;
+        }
     }
 }

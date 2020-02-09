@@ -1,14 +1,24 @@
 ﻿using GymLog.API.Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace GymLog.API.Data
 {
     public class DataContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, UserRole, IdentityUserLogin<int>,
         IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
-        public DataContext(DbContextOptions options) : base(options) { }
+
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public DataContext(DbContextOptions options, IHttpContextAccessor httpContextAccessor) : base(options)
+        {
+            _httpContextAccessor = httpContextAccessor;
+        }
 
         public DbSet<Muscle> Muscles { get; set; }
         public DbSet<Equipment> Equipments { get; set; }
@@ -16,6 +26,38 @@ namespace GymLog.API.Data
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<Daylog> Daylogs { get; set; }
         public DbSet<WorkoutDaylog> WorkoutDaylogs { get; set; }
+
+        public override int SaveChanges()
+        {
+            SetAuditProperties();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            SetAuditProperties();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void SetAuditProperties()
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
+
+            if (httpContext is null)
+                return;
+
+            var username = httpContext.User.Identity.Name;
+            //var authenticatedUserId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            var modifiedEntries = ChangeTracker.Entries()
+                .Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
+
+            foreach (var entry in modifiedEntries)
+            {
+                var entity = entry.Entity as EntityBase;
+                entity?.SetAuditProperties(entry.State, username);
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
