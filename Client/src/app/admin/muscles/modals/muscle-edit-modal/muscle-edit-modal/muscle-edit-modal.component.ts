@@ -31,6 +31,7 @@ export class MuscleEditModalComponent implements OnInit {
     this.muscleservice.update(updatedMuscle).subscribe(() => {
       this.bsModalRef.hide();
       this.muscleservice.getAll();
+      this.muscleservice.clearGetState();
     }, error => {
       console.log(error);
     });

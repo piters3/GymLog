@@ -15,6 +15,7 @@ export class MusclesComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
   muscles$: Observable<Muscle[]>;
   muscle$: Observable<Muscle>;
+  isSussess$: Observable<boolean>;
 
   private destroy$: Subject<void> = new Subject();
 
@@ -25,6 +26,13 @@ export class MusclesComponent implements OnInit, OnDestroy {
     this.musclesService.getAll();
     this.muscles$ = this.musclesService.getMuscles;
     this.muscle$ = this.musclesService.getMuscle;
+    this.isSussess$ = this.musclesService.getSucces;
+    this.isSussess$.pipe(
+      filter(x => x)
+    ).subscribe(() => {
+      this.musclesService.getAll();
+      this.musclesService.clearDeleteState();
+    });
   }
 
   ngOnDestroy(): void {
@@ -45,7 +53,7 @@ export class MusclesComponent implements OnInit, OnDestroy {
     });
   }
 
-  delete(id: number): void {
+  onDelete(id: number): void {
     this.musclesService.delete(id);
   }
 
