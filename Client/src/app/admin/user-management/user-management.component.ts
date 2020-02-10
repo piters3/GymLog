@@ -1,42 +1,47 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component} from '@angular/core';
 import { User } from '../../_models/user';
-import { AdminService } from './services/admin.service';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap';
+import { BsModalService } from 'ngx-bootstrap';
 import { UserEditModalComponent } from './modals/user-edit-modal/user-edit-modal.component';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { filter, withLatestFrom, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { Role } from 'src/app/_models/role';
+import { BaseComponent } from 'src/app/_shared/components/base/base.component';
+import { AdminStore } from './services/admin.store';
 
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
   styleUrls: ['./user-management.component.css']
 })
-export class UserManagementComponent implements OnInit, OnDestroy {
+export class UserManagementComponent extends BaseComponent {
   users$: Observable<User[]>;
   roles$: Observable<Role[]>;
   user$: Observable<User>;
-  isLoading$: Observable<boolean>;
-  private destroy$: Subject<void> = new Subject();
 
-  constructor(private adminService: AdminService, private modalService: BsModalService) { }
+  constructor(private adminStore: AdminStore, private modalService: BsModalService) {
+    super();
+  }
 
   ngOnInit(): void {
-    this.adminService.loadUsersWithRoles();
-    this.adminService.loadRoles();
-    this.users$ = this.adminService.getUsersWithRoles;
-    this.roles$ = this.adminService.getRoles;
-    this.isLoading$ = this.adminService.getLoading;
-    this.user$ = this.adminService.getUser;
+    this.loading$ = this.adminStore.loading$;
+    this.success$ = this.adminStore.success$;
+    this.users$ = this.adminStore.usersWithRoles$;
+    this.roles$ = this.adminStore.roles$;
+    this.user$ = this.adminStore.user$;
+
+    this.adminStore.loadUsersWithRoles();
+    this.adminStore.loadRoles();
+
+    this.success$.pipe(
+      filter(x => x)
+    ).subscribe(() => {
+      this.adminStore.loadUsersWithRoles();
+      this.adminStore.resetSuccess();
+    });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  editUser(userId: number) {
-    this.adminService.loadUser(userId);
+  onEdit(userId: number) {
+    this.adminStore.loadUser(userId);
 
     this.user$.pipe(
       filter((user: User) => !!user && user.id === userId),

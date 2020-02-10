@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { BsModalRef, BsDatepickerConfig } from 'ngx-bootstrap';
 import { User } from '../../../../_models/user';
 import { FormGroup, FormBuilder, FormArray, AbstractControl, Validators } from '@angular/forms';
-import { AdminService } from 'src/app/admin/user-management/services/admin.service';
 import { Role } from 'src/app/_models/role';
+import { AdminStore } from '../../services/admin.store';
+import { Observable } from 'rxjs';
+import { filter, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-roles-modal',
@@ -15,11 +17,12 @@ export class UserEditModalComponent implements OnInit {
   user: User;
   roles: Role[];
   bsConfig: Partial<BsDatepickerConfig>;
+  success$: Observable<boolean>;
 
   get rolesFormControls(): AbstractControl[] { return (this.form.get('roles') as FormArray).controls; }
   get isAdmin(): boolean { return this.user.userName === 'Admin'; }
 
-  constructor(public bsModalRef: BsModalRef, public fb: FormBuilder, private adminService: AdminService) { }
+  constructor(public bsModalRef: BsModalRef, public fb: FormBuilder, private adminStore: AdminStore) { }
 
   ngOnInit(): void {
     this.bsConfig = {
@@ -27,6 +30,15 @@ export class UserEditModalComponent implements OnInit {
       dateInputFormat: 'YYYY-MM-DD'
     };
     this.createForms();
+    this.success$ = this.adminStore.success$;
+
+    this.success$.pipe(
+      filter(x => x),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.adminStore.resetUserState();
+      this.bsModalRef.hide();
+    });
   }
 
   private createForms(): void {
@@ -59,12 +71,6 @@ export class UserEditModalComponent implements OnInit {
   onSubmit(): void {
     const updatedUser: User = { ...this.form.value, id: this.user.id };
     updatedUser.roles = updatedUser.roles.filter((item: any) => item.checked);
-
-    this.adminService.updateUser(updatedUser).subscribe(() => {
-      this.bsModalRef.hide();
-      this.adminService.loadUsersWithRoles();
-    }, error => {
-      console.log(error);
-    });
+    this.adminStore.updateUser(updatedUser);
   }
 }

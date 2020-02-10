@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { BsModalRef } from 'ngx-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Muscle } from 'src/app/_models/muscle';
-import { MusclesService } from 'src/app/admin/muscles/services/muscles.service';
+import { MusclesStore } from '../../services/muscles.store';
+import { Observable } from 'rxjs';
+import { filter, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-musle-edit-modal',
@@ -12,11 +14,21 @@ import { MusclesService } from 'src/app/admin/muscles/services/muscles.service';
 export class MuscleEditModalComponent implements OnInit {
   form: FormGroup;
   muscle: Muscle;
+  success$: Observable<boolean>;
 
-  constructor(public bsModalRef: BsModalRef, public fb: FormBuilder, public muscleservice: MusclesService) { }
+  constructor(public bsModalRef: BsModalRef, public fb: FormBuilder, public musclesStore: MusclesStore) { }
 
   ngOnInit() {
     this.createForms();
+    this.success$ = this.musclesStore.success$;
+
+    this.success$.pipe(
+      filter(x => x),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.musclesStore.resetMuscleState();
+      this.bsModalRef.hide();
+    });
   }
 
   createForms(): void {
@@ -27,14 +39,7 @@ export class MuscleEditModalComponent implements OnInit {
 
   onSubmit(): void {
     const updatedMuscle: Muscle = { ...this.form.value, id: this.muscle.id };
-
-    this.muscleservice.update(updatedMuscle).subscribe(() => {
-      this.bsModalRef.hide();
-      this.muscleservice.getAll();
-      this.muscleservice.clearGetState();
-    }, error => {
-      console.log(error);
-    });
+    this.musclesStore.update(updatedMuscle);
   }
 
 }

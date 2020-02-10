@@ -1,47 +1,43 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MusclesService } from 'src/app/admin/muscles/services/muscles.service';
-import { Observable, Subject } from 'rxjs';
+import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Muscle } from 'src/app/_models/muscle';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap';
-import { MuscleEditModalComponent } from './modals/muscle-edit-modal/muscle-edit-modal/muscle-edit-modal.component';
-import { filter, withLatestFrom, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { BsModalService } from 'ngx-bootstrap';
+import { MuscleEditModalComponent } from './modals/muscle-edit-modal/muscle-edit-modal.component';
+import { filter, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { MusclesStore } from './services/muscles.store';
+import { BaseComponent } from 'src/app/_shared/components/base/base.component';
 
 @Component({
   selector: 'app-muscles',
   templateUrl: './muscles.component.html',
   styleUrls: ['./muscles.component.css']
 })
-export class MusclesComponent implements OnInit, OnDestroy {
-  isLoading$: Observable<boolean>;
+export class MusclesComponent extends BaseComponent {
   muscles$: Observable<Muscle[]>;
   muscle$: Observable<Muscle>;
-  isSussess$: Observable<boolean>;
 
-  private destroy$: Subject<void> = new Subject();
-
-  constructor(private musclesService: MusclesService, private modalService: BsModalService) { }
+  constructor(private musclesStore: MusclesStore, private modalService: BsModalService) {
+    super();
+  }
 
   ngOnInit() {
-    this.isLoading$ = this.musclesService.getLoading;
-    this.musclesService.getAll();
-    this.muscles$ = this.musclesService.getMuscles;
-    this.muscle$ = this.musclesService.getMuscle;
-    this.isSussess$ = this.musclesService.getSucces;
-    this.isSussess$.pipe(
+    this.loading$ = this.musclesStore.loading$;
+    this.muscles$ = this.musclesStore.muscles$;
+    this.muscle$ = this.musclesStore.muscle$;
+    this.success$ = this.musclesStore.success$;
+
+    this.musclesStore.getAll();
+
+    this.success$.pipe(
       filter(x => x)
     ).subscribe(() => {
-      this.musclesService.getAll();
-      this.musclesService.clearDeleteState();
+      this.musclesStore.getAll();
+      this.musclesStore.resetSuccess();
     });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  editMuscle(id: number): void {
-    this.musclesService.get(id);
+  onEdit(id: number): void {
+    this.musclesStore.get(id);
 
     this.muscle$.pipe(
       filter((muscle: Muscle) => !!muscle && muscle.id === id),
@@ -54,7 +50,6 @@ export class MusclesComponent implements OnInit, OnDestroy {
   }
 
   onDelete(id: number): void {
-    this.musclesService.delete(id);
+    this.musclesStore.delete(id);
   }
-
 }

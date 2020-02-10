@@ -24,7 +24,8 @@ import { AdminService } from './admin/user-management/services/admin.service';
 import { UserEditModalComponent } from './admin/user-management/modals/user-edit-modal/user-edit-modal.component';
 import { LoadingSpinnerComponent } from './_shared/components/loading-spinner/loading-spinner.component';
 import { MusclesComponent } from './admin/muscles/muscles.component';
-import { MuscleEditModalComponent } from './admin/muscles/modals/muscle-edit-modal/muscle-edit-modal/muscle-edit-modal.component';
+import { MuscleEditModalComponent } from './admin/muscles/modals/muscle-edit-modal/muscle-edit-modal.component';
+import { BaseComponent } from './_shared/components/base/base.component';
 
 export function tokenGetter() {
    return localStorage.getItem('token');
@@ -46,6 +47,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       UserEditModalComponent,
       MuscleEditModalComponent,
       LoadingSpinnerComponent,
+      BaseComponent,
       MusclesComponent
    ],
    imports: [
