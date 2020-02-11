@@ -26,75 +26,83 @@ import { LoadingSpinnerComponent } from './_shared/components/loading-spinner/lo
 import { MusclesComponent } from './admin/muscles/muscles.component';
 import { MuscleEditModalComponent } from './admin/muscles/modals/muscle-edit-modal/muscle-edit-modal.component';
 import { BaseComponent } from './_shared/components/base/base.component';
+import { MuscleAddModalComponent } from './admin/muscles/modals/muscle-add-modal/muscle-add-modal.component';
+import { ModalSpinnerComponent } from './_shared/components/modal-spinner/modal-spinner.component';
+import { BaseModalComponent } from './_shared/components/base-modal/base-modal.component';
 
 export function tokenGetter() {
-   return localStorage.getItem('token');
+  return localStorage.getItem('token');
 }
 
 export function HttpLoaderFactory(http: HttpClient) {
-   return new TranslateHttpLoader(http);
+  return new TranslateHttpLoader(http);
 }
 
 @NgModule({
-   declarations: [
-      AppComponent,
-      HomeComponent,
-      NavComponent,
-      RegisterComponent,
-      AdminPanelComponent,
-      HasRoleDirective,
-      UserManagementComponent,
-      UserEditModalComponent,
-      MuscleEditModalComponent,
-      LoadingSpinnerComponent,
-      BaseComponent,
-      MusclesComponent
-   ],
-   imports: [
-      BrowserModule,
-      BrowserAnimationsModule,
-      AppRoutingModule,
-      HttpClientModule,
-      FormsModule,
-      ReactiveFormsModule,
-      BsDatepickerModule.forRoot(),
-      TabsModule.forRoot(),
-      BsDropdownModule.forRoot(),
-      ModalModule.forRoot(),
-      JwtModule.forRoot({
-         config: {
-            tokenGetter,
-            whitelistedDomains: ['localhost:5000'],
-            blacklistedRoutes: ['localhost:5000/api/auth']
-         }
-      }),
-      BrowserAnimationsModule,
-      ToastrModule.forRoot({
-         timeOut: 3000,
-         positionClass: 'toast-bottom-right',
-         preventDuplicates: true,
-         progressBar: true
-      }),
-      TranslateModule.forRoot({
-         loader: {
-             provide: TranslateLoader,
-             useFactory: HttpLoaderFactory,
-             deps: [HttpClient]
-         }
-     })
-   ],
-   providers: [
-      AuthService,
-      ErrorInterceptorProvider,
-      AuthGuard,
-      AdminService
-   ],
-   entryComponents: [
-      UserEditModalComponent,
-      MuscleEditModalComponent
-   ],
-   bootstrap: [
-      AppComponent
-   ]
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    NavComponent,
+    RegisterComponent,
+    AdminPanelComponent,
+    HasRoleDirective,
+    UserManagementComponent,
+    BaseModalComponent,
+    UserEditModalComponent,
+    MuscleEditModalComponent,
+    MuscleAddModalComponent,
+    LoadingSpinnerComponent,
+    ModalSpinnerComponent,
+    BaseComponent,
+    MusclesComponent
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BsDatepickerModule.forRoot(),
+    TabsModule.forRoot(),
+    BsDropdownModule.forRoot(),
+    ModalModule.forRoot(),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter,
+        whitelistedDomains: ['localhost:5000'],
+        blacklistedRoutes: ['localhost:5000/api/auth']
+      }
+    }),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+      progressBar: true
+    }),
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
+  ],
+  providers: [
+    AuthService,
+    ErrorInterceptorProvider,
+    AuthGuard,
+    AdminService
+  ],
+  entryComponents: [
+    BaseModalComponent,
+    UserEditModalComponent,
+    MuscleEditModalComponent,
+    MuscleAddModalComponent
+  ],
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }

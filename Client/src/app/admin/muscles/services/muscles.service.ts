@@ -19,7 +19,7 @@ export class MusclesService {
   }
 
   add(muscle: Muscle) {
-    return this.http.post(Urls.musclesUrl, muscle);
+    return this.http.post<Muscle>(Urls.musclesUrl, muscle);
   }
 
   update(muscle: Muscle) {

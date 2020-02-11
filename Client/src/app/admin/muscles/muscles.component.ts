@@ -6,6 +6,7 @@ import { MuscleEditModalComponent } from './modals/muscle-edit-modal/muscle-edit
 import { filter, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { MusclesStore } from './services/muscles.store';
 import { BaseComponent } from 'src/app/_shared/components/base/base.component';
+import { MuscleAddModalComponent } from './modals/muscle-add-modal/muscle-add-modal.component';
 
 @Component({
   selector: 'app-muscles',
@@ -24,16 +25,8 @@ export class MusclesComponent extends BaseComponent {
     this.loading$ = this.musclesStore.loading$;
     this.muscles$ = this.musclesStore.muscles$;
     this.muscle$ = this.musclesStore.muscle$;
-    this.success$ = this.musclesStore.success$;
 
     this.musclesStore.getAll();
-
-    this.success$.pipe(
-      filter(x => x)
-    ).subscribe(() => {
-      this.musclesStore.getAll();
-      this.musclesStore.resetSuccess();
-    });
   }
 
   onEdit(id: number): void {
@@ -51,5 +44,9 @@ export class MusclesComponent extends BaseComponent {
 
   onDelete(id: number): void {
     this.musclesStore.delete(id);
+  }
+
+  onAdd(){
+    this.modalService.show(MuscleAddModalComponent);
   }
 }
