@@ -7,7 +7,10 @@ namespace GymLog.API.Entities
     public class Equipment : EntityBase
     {
         public string Name { get; private set; }
-        public IEnumerable<Exercise> Exercises { get; private set; }
+
+        #region Navigation fields
+        public virtual ICollection<Exercise> Exercises { get; private set; }
+        #endregion
 
         public Equipment(string name)
         {

@@ -14,9 +14,12 @@ namespace GymLog.API.Entities
         public int Weight { get; private set; }
         public int Height { get; private set; }
         public DateTime RegisterDate { get; private set; }
-        public IEnumerable<UserRole> UserRoles { get; private set; }
-        public IEnumerable<Workout> Workouts { get; private set; }
-        public IEnumerable<Daylog> Daylogs { get; private set; }
+
+        #region Navigation fields
+        public virtual ICollection<UserRole> UserRoles { get; private set; }
+        public virtual ICollection<Workout> Workouts { get; private set; }
+        public virtual ICollection<Daylog> Daylogs { get; private set; }
+        #endregion  
 
         public User()
         {

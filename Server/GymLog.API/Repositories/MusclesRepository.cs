@@ -1,31 +1,43 @@
-﻿using GymLog.API.Entities;
+﻿using GymLog.API.Data;
+using GymLog.API.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace GymLog.API.Repositories
 {
     public class MusclesRepository : IMusclesRepository
     {
-        private readonly IEFRepository<Muscle> _repository;
+        private readonly DataContext _ctx;
 
-        public MusclesRepository(IEFRepository<Muscle> repository)
+        public MusclesRepository(DataContext ctx)
         {
-            _repository = repository;
+            _ctx = ctx;
         }
 
         public async Task<ICollection<Muscle>> GetAllAsync()
-            => await _repository.GetAllAsync();
+            => await _ctx.Muscles.ToListAsync();
 
         public async Task<Muscle> GetAsync(int id)
-            => await _repository.GetAsync(id);
+            => await _ctx.Muscles.Where(x => x.Id == id).FirstOrDefaultAsync();
 
         public async Task AddAsync(Muscle entity)
-            => await _repository.AddAsync(entity);
+        {
+            await _ctx.Muscles.AddAsync(entity);
+            await _ctx.SaveChangesAsync();
+        }
 
         public async Task UpdateAsync(Muscle entity)
-            => await _repository.UpdateAsync(entity);
+        {
+            _ctx.Muscles.Update(entity);
+            await _ctx.SaveChangesAsync();
+        }
 
         public async Task DeleteAsync(Muscle entity)
-            => await _repository.DeleteAsync(entity);
+        {
+            _ctx.Muscles.Remove(entity);
+            await _ctx.SaveChangesAsync();
+        }
     }
 }

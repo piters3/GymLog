@@ -83,8 +83,7 @@ namespace GymLog.API.Data
                 new Muscle("Przedramię"),
                 new Muscle("Uda"),
                 new Muscle("Pośladki"),
-                new Muscle("Łydki"),
-                new Muscle("Cardio")
+                new Muscle("Łydki")
             };
 
             muscles.ForEach(x => _ctx.Muscles.Add(x));

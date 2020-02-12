@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using GymLog.API.Data;
 using GymLog.API.DTOs;
 using GymLog.API.Entities;
 using GymLog.API.Repositories;
@@ -18,36 +17,24 @@ namespace GymLog.API.Controllers
     [Authorize(Policy = "RequireAdminRole")]
     public class AdminController : ControllerBase
     {
-        private readonly DataContext _context;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
-        private readonly IUsersRepository _repo;
+        private readonly IAdminRepository _repo;
         private readonly IMapper _mapper;
 
-        public AdminController(DataContext context, UserManager<User> userManager, RoleManager<Role> roleManager, IMapper mapper, IUsersRepository repo)
+        public AdminController(UserManager<User> userManager, RoleManager<Role> roleManager, IMapper mapper, IAdminRepository repo)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _mapper = mapper;
             _repo = repo;
-            _context = context;
         }
 
         [HttpGet("usersWithRoles")]
         public async Task<IActionResult> GetUsersWithRoles()
         {
-            var userList = await (from user in _context.Users
-                                  orderby user.UserName
-                                  select new
-                                  {
-                                      user.Id,
-                                      user.UserName,
-                                      Roles = (from userRole in user.UserRoles
-                                               join role in _context.Roles
-                                               on userRole.RoleId
-                                               equals role.Id
-                                               select role.Name).ToList()
-                                  }).ToListAsync();
+            var userList = await _repo.GetUsersWithRoles();
+
             return Ok(userList);
         }
 
@@ -87,7 +74,7 @@ namespace GymLog.API.Controllers
                 return BadRequest("Failed to remove the roles");
 
             _mapper.Map(userForUpdate, user);
-            await _repo.SaveAllAsync();
+            await _repo.UpdateAsync(user);
 
             return Accepted();
         }

@@ -93,8 +93,8 @@ namespace GymLog.API
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddTransient<Seed>();
             services.AddHttpContextAccessor();
-            services.AddScoped<IUsersRepository, UsersRepository>();
-            services.AddTransient(typeof(IEFRepository<>), typeof(EFRepository<>));
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<IMusclesRepository, MusclesRepository>();
 
             services.AddSwaggerGen(c =>

@@ -8,10 +8,14 @@ namespace GymLog.API.Entities
         public int Sets { get; private set; }
         public int Reps { get; private set; }
         public int Weight { get; private set; }
-        public Exercise Exercise { get; private set; }
-        public User User { get; private set; }
 
-        public IEnumerable<WorkoutDaylog> WorkoutDaylogs { get; private set; }
+        #region Navigation fields
+        public int UserId { get; }
+        public int ExerciseId { get; }
+        public virtual User User { get; private set; }
+        public virtual Exercise Exercise { get; private set; }
+        public virtual ICollection<WorkoutDaylog> WorkoutDaylogs { get; private set; }
+        #endregion  
 
         private Workout()
         {

@@ -7,9 +7,12 @@ namespace GymLog.API.Entities
     public class Daylog : EntityBase
     {
         public DateTime Date { get; private set; }
-        public User User { get; private set; }
-
-        public IEnumerable<WorkoutDaylog> WorkoutDaylogs { get; set; }
+      
+        #region Navigation fields
+        public int UserId { get; private set; }
+        public virtual User User { get; private set; }
+        public virtual ICollection<WorkoutDaylog> WorkoutDaylogs { get; private set; }
+        #endregion
 
         private Daylog()
         {

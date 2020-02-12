@@ -7,10 +7,14 @@ namespace GymLog.API.Entities
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public Equipment Equipment { get; private set; }
-        public Muscle Muscle { get; private set; }
 
-        public IEnumerable<Workout> Workouts { get; private set; }
+        #region Navigation fields
+        public int EquipmentId { get; set; }
+        public int MuscleId { get; set; }
+        public virtual Equipment Equipment { get; private set; }
+        public virtual Muscle Muscle { get; private set; }
+        public ICollection<Workout> Workouts { get; private set; }
+        #endregion
 
         private Exercise()
         {

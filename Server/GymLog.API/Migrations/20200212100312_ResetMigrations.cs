@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GymLog.API.Migrations
 {
-    public partial class Extended : Migration
+    public partial class ResetMigrations : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,9 @@ namespace GymLog.API.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedDate = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedBy = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -29,7 +31,9 @@ namespace GymLog.API.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedDate = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedBy = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -76,8 +80,8 @@ namespace GymLog.API.Migrations
                     Surname = table.Column<string>(nullable: true),
                     Enabled = table.Column<bool>(nullable: false),
                     Gender = table.Column<int>(nullable: false),
-                    Weight = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
-                    Height = table.Column<decimal>(type: "decimal(18, 2)", nullable: false),
+                    Weight = table.Column<int>(nullable: false),
+                    Height = table.Column<int>(nullable: false),
                     RegisterDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -92,11 +96,13 @@ namespace GymLog.API.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedDate = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedBy = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    EquipmentId = table.Column<int>(nullable: true),
-                    MuscleId = table.Column<int>(nullable: true)
+                    EquipmentId = table.Column<int>(nullable: false),
+                    MuscleId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -106,13 +112,13 @@ namespace GymLog.API.Migrations
                         column: x => x.EquipmentId,
                         principalTable: "Equipments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Exercises_Muscle_MuscleId",
                         column: x => x.MuscleId,
                         principalTable: "Muscle",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -143,9 +149,11 @@ namespace GymLog.API.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedDate = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedBy = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<int>(nullable: true)
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -155,7 +163,7 @@ namespace GymLog.API.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -250,25 +258,27 @@ namespace GymLog.API.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedDate = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     UpdatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedBy = table.Column<string>(nullable: true),
                     Sets = table.Column<int>(nullable: false),
                     Reps = table.Column<int>(nullable: false),
                     Weight = table.Column<int>(nullable: false),
-                    ExerciseId = table.Column<int>(nullable: true),
-                    UserId = table.Column<int>(nullable: true)
+                    UserId1 = table.Column<int>(nullable: true),
+                    ExerciseId1 = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Workouts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Workouts_Exercises_ExerciseId",
-                        column: x => x.ExerciseId,
+                        name: "FK_Workouts_Exercises_ExerciseId1",
+                        column: x => x.ExerciseId1,
                         principalTable: "Exercises",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Workouts_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Workouts_Users_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -358,14 +368,14 @@ namespace GymLog.API.Migrations
                 column: "DaylogId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Workouts_ExerciseId",
+                name: "IX_Workouts_ExerciseId1",
                 table: "Workouts",
-                column: "ExerciseId");
+                column: "ExerciseId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Workouts_UserId",
+                name: "IX_Workouts_UserId1",
                 table: "Workouts",
-                column: "UserId");
+                column: "UserId1");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -10,14 +10,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymLog.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20191225110541_Extended")]
-    partial class Extended
+    [Migration("20200212100312_ResetMigrations")]
+    partial class ResetMigrations
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0")
+                .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -28,16 +28,22 @@ namespace GymLog.API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -54,10 +60,16 @@ namespace GymLog.API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedDate")
@@ -75,19 +87,25 @@ namespace GymLog.API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EquipmentId")
+                    b.Property<int>("EquipmentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MuscleId")
+                    b.Property<int>("MuscleId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedDate")
@@ -109,10 +127,16 @@ namespace GymLog.API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedDate")
@@ -179,8 +203,8 @@ namespace GymLog.API.Migrations
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Height")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -224,8 +248,8 @@ namespace GymLog.API.Migrations
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
 
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -262,10 +286,13 @@ namespace GymLog.API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ExerciseId")
+                    b.Property<int?>("ExerciseId1")
                         .HasColumnType("int");
 
                     b.Property<int>("Reps")
@@ -274,10 +301,13 @@ namespace GymLog.API.Migrations
                     b.Property<int>("Sets")
                         .HasColumnType("int");
 
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int?>("UserId1")
                         .HasColumnType("int");
 
                     b.Property<int>("Weight")
@@ -285,9 +315,9 @@ namespace GymLog.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExerciseId");
+                    b.HasIndex("ExerciseId1");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Workouts");
                 });
@@ -395,20 +425,26 @@ namespace GymLog.API.Migrations
 
             modelBuilder.Entity("GymLog.API.Entities.Daylog", b =>
                 {
-                    b.HasOne("GymLog.API.Entities.User", null)
+                    b.HasOne("GymLog.API.Entities.User", "User")
                         .WithMany("Daylogs")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GymLog.API.Entities.Exercise", b =>
                 {
-                    b.HasOne("GymLog.API.Entities.Equipment", null)
+                    b.HasOne("GymLog.API.Entities.Equipment", "Equipment")
                         .WithMany("Exercises")
-                        .HasForeignKey("EquipmentId");
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("GymLog.API.Entities.Muscle", null)
+                    b.HasOne("GymLog.API.Entities.Muscle", "Muscle")
                         .WithMany("Exercises")
-                        .HasForeignKey("MuscleId");
+                        .HasForeignKey("MuscleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GymLog.API.Entities.UserRole", b =>
@@ -428,13 +464,13 @@ namespace GymLog.API.Migrations
 
             modelBuilder.Entity("GymLog.API.Entities.Workout", b =>
                 {
-                    b.HasOne("GymLog.API.Entities.Exercise", null)
+                    b.HasOne("GymLog.API.Entities.Exercise", "Exercise")
                         .WithMany("Workouts")
-                        .HasForeignKey("ExerciseId");
+                        .HasForeignKey("ExerciseId1");
 
-                    b.HasOne("GymLog.API.Entities.User", null)
+                    b.HasOne("GymLog.API.Entities.User", "User")
                         .WithMany("Workouts")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("GymLog.API.Entities.WorkoutDaylog", b =>

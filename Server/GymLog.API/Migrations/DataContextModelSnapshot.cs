@@ -41,7 +41,7 @@ namespace GymLog.API.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -94,10 +94,10 @@ namespace GymLog.API.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EquipmentId")
+                    b.Property<int>("EquipmentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MuscleId")
+                    b.Property<int>("MuscleId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -290,7 +290,7 @@ namespace GymLog.API.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ExerciseId")
+                    b.Property<int?>("ExerciseId1")
                         .HasColumnType("int");
 
                     b.Property<int>("Reps")
@@ -305,7 +305,7 @@ namespace GymLog.API.Migrations
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId")
+                    b.Property<int?>("UserId1")
                         .HasColumnType("int");
 
                     b.Property<int>("Weight")
@@ -313,9 +313,9 @@ namespace GymLog.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExerciseId");
+                    b.HasIndex("ExerciseId1");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Workouts");
                 });
@@ -425,18 +425,24 @@ namespace GymLog.API.Migrations
                 {
                     b.HasOne("GymLog.API.Entities.User", "User")
                         .WithMany("Daylogs")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GymLog.API.Entities.Exercise", b =>
                 {
                     b.HasOne("GymLog.API.Entities.Equipment", "Equipment")
                         .WithMany("Exercises")
-                        .HasForeignKey("EquipmentId");
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("GymLog.API.Entities.Muscle", "Muscle")
                         .WithMany("Exercises")
-                        .HasForeignKey("MuscleId");
+                        .HasForeignKey("MuscleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("GymLog.API.Entities.UserRole", b =>
@@ -458,11 +464,11 @@ namespace GymLog.API.Migrations
                 {
                     b.HasOne("GymLog.API.Entities.Exercise", "Exercise")
                         .WithMany("Workouts")
-                        .HasForeignKey("ExerciseId");
+                        .HasForeignKey("ExerciseId1");
 
                     b.HasOne("GymLog.API.Entities.User", "User")
                         .WithMany("Workouts")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
                 });
 
             modelBuilder.Entity("GymLog.API.Entities.WorkoutDaylog", b =>

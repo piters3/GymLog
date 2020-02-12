@@ -28,15 +28,13 @@ namespace GymLog.API.Controllers
         /// Gets all muscles.
         /// </summary> 
         /// <returns>A collecion of Muscle</returns>
-        /// <response code="200">Returns collection of Muscle</response>
-        /// <response code="404">If the collection is empty</response>         
+        /// <response code="200">Returns collection of Muscle</response>     
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get()
         {
             var muscles = await _musclesRepository.GetAllAsync();
-            var result = _mapper.Map<IEnumerable<MuscleDto>>(muscles);
+            var result = _mapper.Map<ICollection<MuscleDto>>(muscles);
 
             return Ok(result);
         }
