@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './_guards/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
+import { LogsComponent } from './user/logs/logs.component';
 
 // const routes: Routes = [
 //   { path: 'home', component: HomeComponent },
@@ -16,11 +17,19 @@ import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 const routes: Routes = [
   { path: '', component: HomeComponent },
   {
-    path: '',
+    path: 'admin',
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
-      { path: 'admin', component: AdminPanelComponent, data: { roles: ['Admin'] } },
+      { path: '', component: AdminPanelComponent, data: { roles: ['Admin'] } },
+    ]
+  },
+  {
+    path: 'user',
+    runGuardsAndResolvers: 'always',
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'logs', component: LogsComponent, data: { roles: ['User'] } },
     ]
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },

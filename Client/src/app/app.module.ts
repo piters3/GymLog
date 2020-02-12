@@ -29,6 +29,7 @@ import { BaseComponent } from './_shared/components/base/base.component';
 import { MuscleAddModalComponent } from './admin/muscles/modals/muscle-add-modal/muscle-add-modal.component';
 import { ModalSpinnerComponent } from './_shared/components/modal-spinner/modal-spinner.component';
 import { BaseModalComponent } from './_shared/components/base-modal/base-modal.component';
+import { LogsComponent } from './user/logs/logs.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -54,7 +55,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     LoadingSpinnerComponent,
     ModalSpinnerComponent,
     BaseComponent,
-    MusclesComponent
+    MusclesComponent,
+    LogsComponent
   ],
   imports: [
     BrowserModule,

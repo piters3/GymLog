@@ -3,10 +3,10 @@
     <a class="navbar-brand" [routerLink]="['/home']">GymLog</a>
 
     <ul *ngIf="loggedIn()" class="navbar-nav mr-auto">
-      <!-- <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" [routerLink]="['/members']">Matches</a>
-      </li>
       <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" [routerLink]="['/user/logs']">Logs</a>
+      </li>
+      <!-- <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" [routerLink]="['/lists']">Lists</a>
       </li>
       <li class="nav-item" routerLinkActive="active">
@@ -34,10 +34,13 @@
     <form [formGroup]="form" *ngIf="!loggedIn()" class="form-inline my-2 my-lg-0" (ngSubmit)="login()">
       <input class="form-control mr-sm-2" type="text" formControlName="username" placeholder="Username">
       <input class="form-control mr-sm-2" type="password" formControlName="password" placeholder="Password" required>
-      <button [disabled]="!form.valid" class="btn btn-success my-2 my-sm-0" type="submit">{{ 'Login' | translate }}</button>
+      <button [disabled]="!form.valid" class="btn btn-success my-2 my-sm-0"
+        type="submit">{{ 'Login' | translate }}</button>
     </form>
 
-    <button [disabled]="i18n.currentLang === 'pl'" class="btn btn-primary float-right" (click)="i18n.use('pl')">PL</button>
-    <button [disabled]="i18n.currentLang === 'en'" class="btn btn-primary float-right" (click)="i18n.use('en')">EN</button>
+    <button [disabled]="i18n.currentLang === 'pl'" class="btn btn-primary float-right"
+      (click)="i18n.use('pl')">PL</button>
+    <button [disabled]="i18n.currentLang === 'en'" class="btn btn-primary float-right"
+      (click)="i18n.use('en')">EN</button>
   </div>
 </nav>

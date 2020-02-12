@@ -69,7 +69,7 @@ export class UserEditModalComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const updatedUser: User = { ...this.form.value, id: this.user.id };
+    const updatedUser: User = { ...this.form.getRawValue(), id: this.user.id };
     updatedUser.roles = updatedUser.roles.filter((item: any) => item.checked);
     this.adminStore.updateUser(updatedUser);
   }
