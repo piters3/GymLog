@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './_guards/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
-import { LogsComponent } from './user/logs/logs.component';
+import { DaylogsComponent } from './user/daylogs/daylogs.component';
 
 // const routes: Routes = [
 //   { path: 'home', component: HomeComponent },
@@ -29,7 +29,7 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
-      { path: 'logs', component: LogsComponent, data: { roles: ['User'] } },
+      { path: 'logs', component: DaylogsComponent, data: { roles: ['User'] } },
     ]
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },

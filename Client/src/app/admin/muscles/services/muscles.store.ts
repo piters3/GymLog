@@ -11,8 +11,8 @@ export class MusclesStore {
   private readonly _loading = new BehaviorSubject(false);
   private readonly _modalLoading = new BehaviorSubject(false);
   private readonly _success = new BehaviorSubject(false);
-  private readonly _muscle = new BehaviorSubject(null);
-  private readonly _muscles = new BehaviorSubject([]);
+  private readonly _muscle: BehaviorSubject<Muscle> = new BehaviorSubject(null);
+  private readonly _muscles: BehaviorSubject<Muscle[]> = new BehaviorSubject([]);
 
   public loading$ = this._loading.asObservable();
   public modalLoading$ = this._modalLoading.asObservable();

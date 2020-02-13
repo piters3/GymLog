@@ -1,6 +1,6 @@
 ﻿namespace GymLog.API.DTOs
 {
-    public class WorkoutsDto
+    public class WorkoutDto
     {
         public int Sets { get; set; }
         public int Reps { get; set; }

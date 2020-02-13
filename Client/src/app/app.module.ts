@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { BsDropdownModule, TabsModule, ModalModule, BsDatepickerModule } from 'ngx-bootstrap';
+import { BsDropdownModule, TabsModule, ModalModule } from 'ngx-bootstrap';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JwtModule } from '@auth0/angular-jwt';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -29,7 +30,7 @@ import { BaseComponent } from './_shared/components/base/base.component';
 import { MuscleAddModalComponent } from './admin/muscles/modals/muscle-add-modal/muscle-add-modal.component';
 import { ModalSpinnerComponent } from './_shared/components/modal-spinner/modal-spinner.component';
 import { BaseModalComponent } from './_shared/components/base-modal/base-modal.component';
-import { LogsComponent } from './user/logs/logs.component';
+import { DaylogsComponent } from './user/daylogs/daylogs.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -56,7 +57,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ModalSpinnerComponent,
     BaseComponent,
     MusclesComponent,
-    LogsComponent
+    DaylogsComponent
   ],
   imports: [
     BrowserModule,

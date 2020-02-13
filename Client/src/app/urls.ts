@@ -10,6 +10,7 @@ export class Urls {
     static musclesUrl = environment.apiUrl + 'muscles/';
 
     static userDaylogsUrl = environment.apiUrl + 'user/daylogs';
+    static userDaylogsDatesUrl = environment.apiUrl + 'daylogs/daylogsDates';
 
     static userUrl = environment.apiUrl + 'admin/getuser/';
     static rolesUrl = environment.apiUrl + 'admin/roles/';

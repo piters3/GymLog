@@ -21,6 +21,5 @@ namespace GymLog.API.Repositories
             .ThenInclude(x => x.Workout)
             .ThenInclude(x => x.Exercise)
             .ToListAsync();
-
     }
 }

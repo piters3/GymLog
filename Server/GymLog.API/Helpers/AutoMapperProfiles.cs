@@ -23,7 +23,7 @@ namespace GymLog.API.Helpers
             CreateMap<RoleDto, Role>();
             CreateMap<Muscle, MuscleDto>();
             CreateMap<MuscleDto, Muscle>();
-            CreateMap<Workout, WorkoutsDto>()
+            CreateMap<Workout, WorkoutDto>()
                 .ForMember(dest => dest.ExerciseId, opt => opt.MapFrom(src => src.Exercise.Id))
                 .ForMember(dest => dest.ExerciseName, opt => opt.MapFrom(src => src.Exercise.Name));
             CreateMap<Daylog, DaylogDto>().ForMember(dest => dest.Workouts, opt => opt.MapFrom(src => src.WorkoutDaylogs.Select(x => x.Workout)));
