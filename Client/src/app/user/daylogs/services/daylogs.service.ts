@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Urls } from 'src/app/urls';
+import { DaylogDto } from 'src/app/_models/daylogDto';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +12,11 @@ export class DaylogsService {
   constructor(private http: HttpClient) { }
 
   getDaylogsDates(date: Date) {
-    const params = new HttpParams().set('date', date.toDateString());
-    return this.http.get<Date[]>(Urls.userDaylogsDatesUrl, { params });
+    return this.http.get<Date[]>(Urls.userDaylogsDatesUrl + moment(date).format('YYYY-MM-DD'));
+  }
+
+  getDaylog(date: Date) {
+
+    return this.http.get<DaylogDto>(Urls.userDaylogUrl + moment(date).format('YYYY-MM-DD'));
   }
 }

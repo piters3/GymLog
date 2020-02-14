@@ -31,6 +31,8 @@ import { MuscleAddModalComponent } from './admin/muscles/modals/muscle-add-modal
 import { ModalSpinnerComponent } from './_shared/components/modal-spinner/modal-spinner.component';
 import { BaseModalComponent } from './_shared/components/base-modal/base-modal.component';
 import { DaylogsComponent } from './user/daylogs/daylogs.component';
+import { MonthComponent } from './_shared/components/month/month.component';
+import { DaylogComponent } from './user/daylog/daylog.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -57,7 +59,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     ModalSpinnerComponent,
     BaseComponent,
     MusclesComponent,
-    DaylogsComponent
+    DaylogsComponent,
+    MonthComponent,
+    DaylogComponent
   ],
   imports: [
     BrowserModule,

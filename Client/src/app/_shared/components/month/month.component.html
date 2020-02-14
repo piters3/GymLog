@@ -1,0 +1,14 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th *ngFor="let day of month.daysOfWeek" class="text-center">{{day}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let week of month.weeks">
+      <td *ngFor="let day of week.days" class="text-center" [ngClass]="{'table-primary': day.filled}">
+        <a [routerLink]="['.', day.date]">{{day.displayValue}}</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

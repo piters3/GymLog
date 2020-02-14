@@ -4,6 +4,7 @@ import { AuthGuard } from './_guards/auth.guard';
 import { HomeComponent } from './home/home.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { DaylogsComponent } from './user/daylogs/daylogs.component';
+import { DaylogComponent } from './user/daylog/daylog.component';
 
 // const routes: Routes = [
 //   { path: 'home', component: HomeComponent },
@@ -21,7 +22,7 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
-      { path: '', component: AdminPanelComponent, data: { roles: ['Admin'] } },
+      { path: '', component: AdminPanelComponent, data: { roles: ['Admin'] } }
     ]
   },
   {
@@ -30,6 +31,7 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'logs', component: DaylogsComponent, data: { roles: ['User'] } },
+      { path: 'logs/:date', component: DaylogComponent, data: { roles: ['User'] } }
     ]
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },

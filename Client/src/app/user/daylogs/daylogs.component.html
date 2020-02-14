@@ -1,66 +1,17 @@
-<!-- <ng-container *ngIf="!(loading$ | async); else loading"> -->
-
-<!-- <form [formGroup]="form" (ngSubmit)="form.dirty && form.valid && onSubmit()">
-
-    <pre>{{form.getRawValue() | json}}</pre>
-    <pre>{{form.status}}</pre>
-
-    <div class="form-group row">
-      <label for="registerDate" class="col-sm-2 col-form-label col-form-label-sm">Data rejestracji</label>
-      <div class="col-sm-10">
-        <input type="text" formControlName="registerDate" bsDatepicker [bsConfig]="bsConfig"
-          class="form-control form-control-sm" placeholder="Data rejestracji">
+<ng-container *ngIf="!(loading$ | async); else loading">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-12 col-md-4 form-group">
+        <input type="text" class="form-control" [bsConfig]="bsConfig" #dp="bsDatepicker" bsDatepicker
+          [(bsValue)]="initialValue" (bsValueChange)="onValueChange($event)">
       </div>
     </div>
-  </form> -->
-<div class="container">
-  <div class="row">
-    <div class="col-xs-12 col-12 col-md-4 form-group">
-      <input type="text" class="form-control" [bsConfig]="bsConfig" #dp="bsDatepicker" bsDatepicker
-        [(bsValue)]="initialValue" (bsValueChange)="onValueChange($event)">
+    <div class="row">
+      <app-month [month]="month"></app-month>
     </div>
-    <pre>{{dates$ | async | json}}</pre>
-    {{month.daysInMonth}}
   </div>
-  <div class="row">
-    <!-- {{month.weeks| json}} -->
-
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th *ngFor="let day of month.daysOfWeek" scope="col">{{day}}</th>
-        </tr>
-      </thead>
-      <tbody>
-         <tr *ngFor="let week of month.weeks">
-          <td *ngFor="let day of week.days">
-            {{day.dayNumber}}
-            {{day.filled}}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!-- <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th *ngFor="let day of calendar.daysOfWeek" scope="col">{{day}}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let day of calendar.month">
-          <td>{{day.}}</td>
-          <td>{{user.id}}</td>
-          <td>{{user.userName}}</td>
-          <td>{{user.roles}}</td>
-        </tr>
-      </tbody>
-    </table> -->
-  </div>
-</div>
-
-<!-- </ng-container>
+</ng-container>
 
 <ng-template #loading>
   <app-loading-spinner></app-loading-spinner>
-</ng-template> -->
+</ng-template>

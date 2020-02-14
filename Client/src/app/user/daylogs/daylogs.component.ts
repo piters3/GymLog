@@ -13,10 +13,10 @@ import { Month } from './month';
 })
 export class DaylogsComponent extends BaseComponent {
   dates$: Observable<Date[]>;
-  initialValue: Date = new Date();
+  initialValue: Date = this.firstDayMonth();
+  selectedDate = this.firstDayMonth();
   minMode: BsDatepickerViewMode = 'month';
   bsConfig: Partial<BsDatepickerConfig>;
-  selectedDate = new Date();
   month: Month;
   filledDays: number[];
 
@@ -27,8 +27,7 @@ export class DaylogsComponent extends BaseComponent {
   ngOnInit() {
     this.bsConfig = {
       minMode: this.minMode,
-      dateInputFormat: 'YYYY-MM-DD',
-      value: new Date()
+      dateInputFormat: 'YYYY-MM-DD'
     }
 
     this.loading$ = this.daylogsStore.loading$;
@@ -48,5 +47,8 @@ export class DaylogsComponent extends BaseComponent {
     this.daylogsStore.getDaylogDates(this.selectedDate);
   }
 
-
+  private firstDayMonth(): Date {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), 1);
+  }
 }

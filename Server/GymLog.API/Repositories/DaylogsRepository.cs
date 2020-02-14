@@ -1,4 +1,5 @@
 ﻿using GymLog.API.Data;
+using GymLog.API.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,5 +23,12 @@ namespace GymLog.API.Repositories
             .Select(x => x.Date)
             .ToListAsync();
 
+        public async Task<Daylog> GetDaylog(int userId, DateTime date)
+            => await _ctx.Daylogs
+            .Include(x => x.WorkoutDaylogs)
+            .ThenInclude(x => x.Workout)
+            .ThenInclude(x => x.Exercise)
+            .Where(x => x.UserId == userId && x.Date == date)
+            .FirstOrDefaultAsync();
     }
 }
