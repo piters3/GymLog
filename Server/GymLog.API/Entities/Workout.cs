@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace GymLog.API.Entities
 {
-    public class Workout : EntityBase
+    public class Workout : AuditableEntity
     {
         public int Sets { get; private set; }
         public int Reps { get; private set; }
         public int Weight { get; private set; }
 
-        #region Navigation fields
+        #region Relationships
         public int UserId { get; }
         public int ExerciseId { get; }
         public virtual User User { get; private set; }
@@ -78,3 +78,4 @@ namespace GymLog.API.Entities
         }
     }
 }
+

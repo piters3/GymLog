@@ -1,4 +1,5 @@
-﻿using GymLog.API.Entities;
+﻿using GymLog.API.Data.Configurations;
+using GymLog.API.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -54,13 +55,14 @@ namespace GymLog.API.Data
 
             foreach (var entry in modifiedEntries)
             {
-                var entity = entry.Entity as EntityBase;
+                var entity = entry.Entity as AuditableEntity;
                 entity?.SetAuditProperties(entry.State, username);
             }
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+
             base.OnModelCreating(builder);
 
             builder.Entity<UserRole>(userRole =>
@@ -95,37 +97,12 @@ namespace GymLog.API.Data
             builder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
             builder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
 
-            builder.Entity<Muscle>()
-                .ToTable("Muscle")
-                .HasMany(x => x.Exercises);
-
-            builder.Entity<Equipment>()
-                .ToTable("Equipments")
-                .HasMany(x => x.Exercises);
-
-            builder.Entity<Exercise>()
-                .ToTable("Exercises")
-                .HasMany(x => x.Workouts);
-
-            builder.Entity<Workout>().ToTable("Workouts");
-
-            builder.Entity<Daylog>().ToTable("Daylogs");
-
-            builder.Entity<WorkoutDaylog>(wd =>
-            {
-                wd.ToTable("WorkoutDaylogs");
-                wd.HasKey(x => new { x.WorkoutId, x.DaylogId });
-
-                wd.HasOne(x => x.Workout)
-                    .WithMany(d => d.WorkoutDaylogs)
-                    .HasForeignKey(x => x.WorkoutId)
-                    .IsRequired();
-
-                wd.HasOne(x => x.Daylog)
-                    .WithMany(d => d.WorkoutDaylogs)
-                    .HasForeignKey(x => x.DaylogId)
-                    .IsRequired();
-            });
+            builder.ApplyConfiguration(new MuscleConfiguration());
+            builder.ApplyConfiguration(new EquipmentConfiguration());
+            builder.ApplyConfiguration(new ExerciseConfiguration());
+            builder.ApplyConfiguration(new WorkoutConfiguration());
+            builder.ApplyConfiguration(new DaylogConfiguration());
+            builder.ApplyConfiguration(new WorkoutDaylogConfiguration());
         }
     }
 }

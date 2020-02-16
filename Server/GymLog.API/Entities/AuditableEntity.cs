@@ -3,12 +3,12 @@ using System;
 
 namespace GymLog.API.Entities
 {
-    public abstract class EntityBase : IIdentifiable
+    public abstract class AuditableEntity : BaseEntity
     {
-        public int Id { get; protected set; }
+        public byte[] Version { get; }
         public DateTime CreatedDate { get; protected set; }
+        public DateTime? UpdatedDate { get; protected set; }
         public string CreatedBy { get; protected set; }
-        public DateTime UpdatedDate { get; protected set; }
         public string UpdatedBy { get; protected set; }
 
         public virtual void SetAuditProperties(EntityState state, string username)

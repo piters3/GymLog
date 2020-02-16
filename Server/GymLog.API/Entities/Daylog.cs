@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace GymLog.API.Entities
 {
-    public class Daylog : EntityBase
+    public class Daylog : AuditableEntity
     {
         public DateTime Date { get; private set; }
-      
-        #region Navigation fields
+
+        #region Relationships
         public int UserId { get; private set; }
         public virtual User User { get; private set; }
         public virtual ICollection<WorkoutDaylog> WorkoutDaylogs { get; private set; }

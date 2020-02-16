@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace GymLog.API.Entities
 {
-    public class Equipment : EntityBase
+    public class Equipment : BaseEntity
     {
         public string Name { get; private set; }
 
-        #region Navigation fields
+        #region Relationships
         public virtual ICollection<Exercise> Exercises { get; private set; }
         #endregion
 

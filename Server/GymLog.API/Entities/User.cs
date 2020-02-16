@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace GymLog.API.Entities
 {
-    public class User : IdentityUser<int>
+    public class User : IdentityUser<int>, IIdentifiable
     {
         public string Name { get; private set; }
         public string Surname { get; private set; }

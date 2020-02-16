@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace GymLog.API.Entities
 {
-    public class Exercise : EntityBase
+    public class Exercise : BaseEntity
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
 
-        #region Navigation fields
+        #region Relationships
         public int EquipmentId { get; set; }
         public int MuscleId { get; set; }
         public virtual Equipment Equipment { get; private set; }
