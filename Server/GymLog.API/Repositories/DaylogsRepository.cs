@@ -25,10 +25,9 @@ namespace GymLog.API.Repositories
 
         public async Task<Daylog> GetDaylog(int userId, DateTime date)
             => await _ctx.Daylogs
-            .Include(x => x.WorkoutDaylogs)
-            .ThenInclude(x => x.Workout)
-            .ThenInclude(x => x.Exercise)
             .Where(x => x.UserId == userId && x.Date == date)
+            .Include(x => x.Workouts)
+            .ThenInclude(x => x.Exercise)
             .FirstOrDefaultAsync();
     }
 }

@@ -17,7 +17,7 @@ namespace GymLog.API.Entities
 
         #region Navigation fields
         public virtual ICollection<UserRole> UserRoles { get; private set; }
-        public virtual ICollection<Workout> Workouts { get; private set; }
+        public virtual ICollection<Routine> Routines { get; private set; }
         public virtual ICollection<Daylog> Daylogs { get; private set; }
         #endregion  
 

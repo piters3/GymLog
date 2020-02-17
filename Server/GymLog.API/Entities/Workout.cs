@@ -1,5 +1,4 @@
 ﻿using GymLog.API.Exceptions;
-using System.Collections.Generic;
 
 namespace GymLog.API.Entities
 {
@@ -10,24 +9,20 @@ namespace GymLog.API.Entities
         public int Weight { get; private set; }
 
         #region Relationships
-        public int UserId { get; }
         public int ExerciseId { get; }
-        public virtual User User { get; private set; }
         public virtual Exercise Exercise { get; private set; }
-        public virtual ICollection<WorkoutDaylog> WorkoutDaylogs { get; private set; }
         #endregion  
 
-        private Workout()
+        public Workout()
         {
 
         }
 
-        public Workout(int sets, int reps, int weight, User user, Exercise exercise)
+        public Workout(int sets, int reps, int weight, Exercise exercise)
         {
             SetSets(sets);
             SetReps(reps);
             SetWeight(weight);
-            SetUser(user);
             SetExercise(exercise);
         }
 
@@ -59,14 +54,6 @@ namespace GymLog.API.Entities
             }
 
             Weight = weight;
-        }
-
-        private void SetUser(User user)
-        {
-            if (user is null)
-                throw new GymLogException(ExceptionCode.NullReference, "Workout user cannot be null.");
-
-            User = user;
         }
 
         private void SetExercise(Exercise exercise)

@@ -10,7 +10,7 @@ namespace GymLog.API.Data.Configurations
         {
             base.Configure(builder);
 
-            builder.ToTable("Daylogs");
+            builder.ToTable("Daylogs").HasMany(x => x.Workouts);
         }
     }
 }

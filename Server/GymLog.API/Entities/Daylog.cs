@@ -11,7 +11,7 @@ namespace GymLog.API.Entities
         #region Relationships
         public int UserId { get; private set; }
         public virtual User User { get; private set; }
-        public virtual ICollection<WorkoutDaylog> WorkoutDaylogs { get; private set; }
+        public virtual ICollection<Workout> Workouts { get; private set; }
         #endregion
 
         private Daylog()
@@ -19,10 +19,11 @@ namespace GymLog.API.Entities
 
         }
 
-        public Daylog(DateTime date, User user)
+        public Daylog(DateTime date, ICollection<Workout> workouts, User user)
         {
             Date = date;
             SetUser(user);
+            SetWorkouts(workouts);
         }
 
         private void SetUser(User user)
@@ -31,6 +32,17 @@ namespace GymLog.API.Entities
                 throw new GymLogException(ExceptionCode.NullReference, "Daylog user cannot be null.");
 
             User = user;
+        }
+
+        private void SetWorkouts(ICollection<Workout> workouts)
+        {
+            if (workouts == null || workouts.Count == 0)
+            {
+                throw new GymLogException(ExceptionCode.EmptyCollection,
+                    $"Cannot create an equipment for an empty excercises.");
+            }
+
+            Workouts = workouts;
         }
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GymLog.API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200216213243_Configurations")]
-    partial class Configurations
+    [Migration("20200217132025_Routines")]
+    partial class Routines
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,46 @@ namespace GymLog.API.Migrations
                 .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("GymLog.API.Entities.DayWorkout", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Day")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RoutineId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoutineId");
+
+                    b.ToTable("DayWorkouts");
+                });
 
             modelBuilder.Entity("GymLog.API.Entities.Daylog", b =>
                 {
@@ -148,6 +188,53 @@ namespace GymLog.API.Migrations
                     b.ToTable("Roles");
                 });
 
+            modelBuilder.Entity("GymLog.API.Entities.Routine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Frequency")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsCurrent")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Routines");
+                });
+
             modelBuilder.Entity("GymLog.API.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -264,6 +351,12 @@ namespace GymLog.API.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("DayWorkoutId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DaylogId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ExerciseId1")
                         .HasColumnType("int");
 
@@ -279,9 +372,6 @@ namespace GymLog.API.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("Version")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate()
@@ -292,26 +382,13 @@ namespace GymLog.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExerciseId1");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("Workouts");
-                });
-
-            modelBuilder.Entity("GymLog.API.Entities.WorkoutDaylog", b =>
-                {
-                    b.Property<int>("WorkoutId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DaylogId")
-                        .HasColumnType("int");
-
-                    b.HasKey("WorkoutId", "DaylogId");
+                    b.HasIndex("DayWorkoutId");
 
                     b.HasIndex("DaylogId");
 
-                    b.ToTable("WorkoutDaylogs");
+                    b.HasIndex("ExerciseId1");
+
+                    b.ToTable("Workouts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -400,6 +477,13 @@ namespace GymLog.API.Migrations
                     b.ToTable("UserTokens");
                 });
 
+            modelBuilder.Entity("GymLog.API.Entities.DayWorkout", b =>
+                {
+                    b.HasOne("GymLog.API.Entities.Routine", null)
+                        .WithMany("DayWorkouts")
+                        .HasForeignKey("RoutineId");
+                });
+
             modelBuilder.Entity("GymLog.API.Entities.Daylog", b =>
                 {
                     b.HasOne("GymLog.API.Entities.User", "User")
@@ -424,6 +508,15 @@ namespace GymLog.API.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("GymLog.API.Entities.Routine", b =>
+                {
+                    b.HasOne("GymLog.API.Entities.User", "User")
+                        .WithMany("Routines")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("GymLog.API.Entities.UserRole", b =>
                 {
                     b.HasOne("GymLog.API.Entities.Role", "Role")
@@ -441,28 +534,17 @@ namespace GymLog.API.Migrations
 
             modelBuilder.Entity("GymLog.API.Entities.Workout", b =>
                 {
+                    b.HasOne("GymLog.API.Entities.DayWorkout", null)
+                        .WithMany("Workouts")
+                        .HasForeignKey("DayWorkoutId");
+
+                    b.HasOne("GymLog.API.Entities.Daylog", null)
+                        .WithMany("Workouts")
+                        .HasForeignKey("DaylogId");
+
                     b.HasOne("GymLog.API.Entities.Exercise", "Exercise")
                         .WithMany("Workouts")
                         .HasForeignKey("ExerciseId1");
-
-                    b.HasOne("GymLog.API.Entities.User", "User")
-                        .WithMany("Workouts")
-                        .HasForeignKey("UserId1");
-                });
-
-            modelBuilder.Entity("GymLog.API.Entities.WorkoutDaylog", b =>
-                {
-                    b.HasOne("GymLog.API.Entities.Daylog", "Daylog")
-                        .WithMany("WorkoutDaylogs")
-                        .HasForeignKey("DaylogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GymLog.API.Entities.Workout", "Workout")
-                        .WithMany("WorkoutDaylogs")
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

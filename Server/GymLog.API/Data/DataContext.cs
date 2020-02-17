@@ -1,5 +1,4 @@
-﻿using GymLog.API.Data.Configurations;
-using GymLog.API.Entities;
+﻿using GymLog.API.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -25,8 +24,9 @@ namespace GymLog.API.Data
         public DbSet<Equipment> Equipments { get; set; }
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<Workout> Workouts { get; set; }
+        public DbSet<DayWorkout> DayWorkouts { get; set; }
         public DbSet<Daylog> Daylogs { get; set; }
-        public DbSet<WorkoutDaylog> WorkoutDaylogs { get; set; }
+        public DbSet<Routine> Routines { get; set; }
 
         public override int SaveChanges()
         {
@@ -87,7 +87,6 @@ namespace GymLog.API.Data
                 user.Property(x => x.Weight);
                 user.Property(x => x.Height);
                 user.Property(x => x.Gender).HasConversion<int>();
-                user.HasMany(x => x.Workouts);
                 user.HasMany(x => x.Daylogs);
             });
 
@@ -97,12 +96,67 @@ namespace GymLog.API.Data
             builder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
             builder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
 
-            builder.ApplyConfiguration(new MuscleConfiguration());
-            builder.ApplyConfiguration(new EquipmentConfiguration());
-            builder.ApplyConfiguration(new ExerciseConfiguration());
-            builder.ApplyConfiguration(new WorkoutConfiguration());
-            builder.ApplyConfiguration(new DaylogConfiguration());
-            builder.ApplyConfiguration(new WorkoutDaylogConfiguration());
+            builder.Entity<Muscle>(x =>
+            {
+                x.ToTable("Muscles");
+                x.HasKey(x => x.Id);
+                x.Property(p => p.Name).IsRequired();
+                x.HasMany(x => x.Exercises);
+            });
+
+            builder.Entity<Equipment>(x =>
+            {
+                x.ToTable("Equipments");
+                x.HasKey(x => x.Id);
+                x.Property(p => p.Name).IsRequired();
+                x.HasMany(x => x.Exercises);
+            });
+
+            builder.Entity<Exercise>(x =>
+            {
+                x.ToTable("Exercises");
+                x.HasKey(x => x.Id);
+                x.Property(p => p.Name).IsRequired();
+            });
+
+            builder.Entity<Workout>(x =>
+            {
+                x.ToTable("Workouts");
+                x.HasKey(x => x.Id);
+                x.Property(p => p.Version).IsConcurrencyToken().IsRowVersion();
+            });
+
+            builder.Entity<DayWorkout>(x =>
+            {
+                x.ToTable("DayWorkouts");
+                x.HasKey(x => x.Id);
+                x.Property(p => p.Version).IsConcurrencyToken().IsRowVersion();
+            });           
+
+            builder.Entity<Daylog>(x =>
+            {
+                x.ToTable("Daylogs");
+                x.HasKey(x => x.Id);
+                x.HasMany(x => x.Workouts);
+                x.Property(p => p.Version).IsConcurrencyToken().IsRowVersion();
+            });
+
+            builder.Entity<Routine>(x =>
+            {
+                x.ToTable("Routines");
+                x.HasKey(x => x.Id);
+                x.Property(p => p.Name).IsRequired();
+                x.HasMany(x => x.DayWorkouts);
+                x.Property(p => p.Version).IsConcurrencyToken().IsRowVersion();
+            });
+
+            //builder.ApplyConfiguration(new MuscleConfiguration());
+            //builder.ApplyConfiguration(new EquipmentConfiguration());
+            //builder.ApplyConfiguration(new ExerciseConfiguration());
+            //builder.ApplyConfiguration(new WorkoutConfiguration());
+            //builder.ApplyConfiguration(new RoutineConfiguration());
+            //builder.ApplyConfiguration(new DayWorkoutConfiguration());
+            //builder.ApplyConfiguration(new DaylogConfiguration());
         }
     }
 }

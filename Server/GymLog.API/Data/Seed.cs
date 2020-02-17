@@ -113,36 +113,35 @@ namespace GymLog.API.Data
 
             var workouts = new List<Workout>
             {
-                new Workout(5, 5, 70, user, exercises[0]),
-                new Workout(5, 4, 85, user, exercises[1]),
-                new Workout(3, 14, 90, user, exercises[0]),
-                new Workout(5, 5, 5, user, exercises[2]),
-                new Workout(5, 18, 90, user, exercises[0])
+                new Workout(5, 5, 70, exercises[0]),
+                new Workout(5, 4, 85, exercises[1]),
+                new Workout(3, 14, 90, exercises[0]),
+                new Workout(5, 5, 5, exercises[2]),
+                new Workout(5, 18, 90, exercises[0])
             };
 
             workouts.ForEach(x => _ctx.Workouts.Add(x));
 
             var daylogs = new List<Daylog>
             {
-                new Daylog(DateTime.Today, user),
-                new Daylog(DateTime.Today.AddDays(-2), user)
+                new Daylog(DateTime.Today, workouts, user),
+                new Daylog(DateTime.Today.AddDays(-2), workouts, user)
             };
 
             daylogs.ForEach(x => _ctx.Daylogs.Add(x));
 
-            var wds = new List<WorkoutDaylog>
+            var dayWorkouts = new List<DayWorkout>
             {
-                new WorkoutDaylog(workouts[0], daylogs[0]),
-                new WorkoutDaylog(workouts[1], daylogs[0]),
-                new WorkoutDaylog(workouts[2], daylogs[0]),
-                new WorkoutDaylog(workouts[3], daylogs[0]),
-                new WorkoutDaylog(workouts[4], daylogs[0]),
-                new WorkoutDaylog(workouts[0], daylogs[1]),
-                new WorkoutDaylog(workouts[1], daylogs[1]),
-                new WorkoutDaylog(workouts[4], daylogs[1])
+                new DayWorkout("Lower Body Workout Day", Day.Monday, workouts),
+                new DayWorkout("Upper Body Workout Day", Day.Wednesday, workouts),
+                new DayWorkout("Abs & Core Workout Day", Day.Friday, workouts)
             };
 
-            wds.ForEach(x => _ctx.WorkoutDaylogs.Add(x));
+            dayWorkouts.ForEach(x => _ctx.DayWorkouts.Add(x));
+
+            var routine = new Routine("Sample Beginner Routine", 3, "This routine was designed for bodybuilding beginners who want to gain muscle", true, user, dayWorkouts);
+
+            _ctx.Routines.Add(routine);
 
             _ctx.SaveChanges();
         }

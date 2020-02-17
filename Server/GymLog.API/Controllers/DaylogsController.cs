@@ -27,7 +27,7 @@ namespace GymLog.API.Controllers
         /// Gets all users's daylogs.
         /// </summary> 
         /// <returns>A collecion of user's daylogs</returns>
-        /// <response code="200">Returns collection of daylogs</response> l
+        /// <response code="200">Returns collection of daylogs</response>
         [HttpGet("daylogsDates/{date}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDaylogsDates(DateTime date)

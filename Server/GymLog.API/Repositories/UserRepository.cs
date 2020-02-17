@@ -17,9 +17,9 @@ namespace GymLog.API.Repositories
 
         public async Task<ICollection<Daylog>> GetUserDaylogs(int userId)
             => await _ctx.Daylogs
-            .Include(x => x.WorkoutDaylogs)
-            .ThenInclude(x => x.Workout)
-            .ThenInclude(x => x.Exercise)
+            //.Include(x => x.WorkoutDaylogs)
+            //.ThenInclude(x => x.Workout)
+            //.ThenInclude(x => x.Exercise)
             .ToListAsync();
     }
 }
