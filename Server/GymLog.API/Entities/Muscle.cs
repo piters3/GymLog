@@ -21,7 +21,7 @@ namespace GymLog.API.Entities
             if (string.IsNullOrEmpty(name))
                 throw new GymLogException(ExceptionCode.EmptyProperty, "Muscle name cannot be empty.");
 
-            Name = name.Trim().ToLowerInvariant();
+            Name = name.Trim();
         }
     }
 }

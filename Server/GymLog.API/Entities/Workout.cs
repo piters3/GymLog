@@ -1,16 +1,15 @@
 ﻿using GymLog.API.Exceptions;
+using System.Collections.Generic;
 
 namespace GymLog.API.Entities
 {
     public class Workout : AuditableEntity
     {
-        public int Sets { get; private set; }
-        public int Reps { get; private set; }
-        public int Weight { get; private set; }
-
         #region Relationships
         public int ExerciseId { get; }
         public virtual Exercise Exercise { get; private set; }
+        public virtual ICollection<Set> Sets { get; private set; }
+
         #endregion  
 
         public Workout()
@@ -18,42 +17,10 @@ namespace GymLog.API.Entities
 
         }
 
-        public Workout(int sets, int reps, int weight, Exercise exercise)
+        public Workout(Exercise exercise, ICollection<Set> sets)
         {
-            SetSets(sets);
-            SetReps(reps);
-            SetWeight(weight);
             SetExercise(exercise);
-        }
-
-        private void SetSets(int sets)
-        {
-            if (sets <= 0)
-            {
-                throw new GymLogException(ExceptionCode.InvalidNumber, "Number of sets cannot be zero or negative.");
-            }
-
-            Sets = sets;
-        }
-
-        private void SetReps(int reps)
-        {
-            if (reps <= 0)
-            {
-                throw new GymLogException(ExceptionCode.InvalidNumber, "Number of reps cannot be zero or negative.");
-            }
-
-            Reps = reps;
-        }
-
-        private void SetWeight(int weight)
-        {
-            if (weight <= 0)
-            {
-                throw new GymLogException(ExceptionCode.InvalidNumber, "Number of sets cannot be zero or negative.");
-            }
-
-            Weight = weight;
+            SetSets(sets);
         }
 
         private void SetExercise(Exercise exercise)
@@ -62,6 +29,17 @@ namespace GymLog.API.Entities
                 throw new GymLogException(ExceptionCode.NullReference, "Workout exercise cannot be null.");
 
             Exercise = exercise;
+        }
+
+        private void SetSets(ICollection<Set> sets)
+        {
+            if (sets == null || sets.Count == 0)
+            {
+                throw new GymLogException(ExceptionCode.EmptyCollection,
+                    $"Cannot create an workout for an empty sets.");
+            }
+
+            Sets = sets;
         }
     }
 }

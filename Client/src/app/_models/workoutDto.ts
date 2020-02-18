@@ -1,7 +1,7 @@
+import { SetDto } from './setDto';
+
 export class WorkoutDto {
-  sets: number;
-  reps: number;
-  weight: number;
   exerciseId: number;
   exerciseName: string;
+  sets: SetDto[];
 }

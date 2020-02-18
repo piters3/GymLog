@@ -1,6 +1,5 @@
 ﻿using GymLog.API.Exceptions;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace GymLog.API.Entities
 {
@@ -15,7 +14,6 @@ namespace GymLog.API.Entities
         public Equipment(string name)
         {
             SetName(name);
-            //SetExcercises(exercises);
         }
 
         private void SetName(string name)
@@ -23,16 +21,7 @@ namespace GymLog.API.Entities
             if (string.IsNullOrEmpty(name))
                 throw new GymLogException(ExceptionCode.EmptyProperty, "Equipment name cannot be empty.");
 
-            Name = name.Trim().ToLowerInvariant();
-        }
-
-        private void SetExcercises(IEnumerable<Exercise> exercises)
-        {
-            if (exercises == null || !exercises.Any())
-            {
-                throw new GymLogException(ExceptionCode.EmptyCollection,
-                    $"Cannot create an equipment for an empty excercises.");
-            }
+            Name = name.Trim();
         }
     }
 }

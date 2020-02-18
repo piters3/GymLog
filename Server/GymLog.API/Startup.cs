@@ -97,7 +97,8 @@ namespace GymLog.API
             services.AddScoped<IAdminRepository, AdminRepository>();
             services.AddScoped<IMusclesRepository, MusclesRepository>();
             services.AddScoped<IDaylogsRepository, DaylogsRepository>();
-            
+            services.AddScoped<IExercisesRepository, ExercisesRepository>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo

@@ -7,7 +7,7 @@ namespace GymLog.API.Entities
         public string Name { get; set; }
         public Day Day { get; set; }
 
-        public ICollection<Workout> Workouts { get; set; }
+        public virtual ICollection<Workout> Workouts { get; set; }
 
         public DayWorkout()
         {

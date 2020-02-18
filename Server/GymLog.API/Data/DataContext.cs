@@ -25,6 +25,7 @@ namespace GymLog.API.Data
         public DbSet<Exercise> Exercises { get; set; }
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<DayWorkout> DayWorkouts { get; set; }
+        public DbSet<Set> Sets { get; set; }
         public DbSet<Daylog> Daylogs { get; set; }
         public DbSet<Routine> Routines { get; set; }
 
@@ -84,6 +85,9 @@ namespace GymLog.API.Data
             builder.Entity<User>(user =>
             {
                 user.ToTable("Users");
+                user.Property(p => p.UserName).IsRequired();
+                user.Property(p => p.Name).HasMaxLength(100);
+                user.Property(p => p.Surname).HasMaxLength(100);
                 user.Property(x => x.Weight);
                 user.Property(x => x.Height);
                 user.Property(x => x.Gender).HasConversion<int>();
@@ -100,7 +104,7 @@ namespace GymLog.API.Data
             {
                 x.ToTable("Muscles");
                 x.HasKey(x => x.Id);
-                x.Property(p => p.Name).IsRequired();
+                x.Property(p => p.Name).HasMaxLength(100).IsRequired();
                 x.HasMany(x => x.Exercises);
             });
 
@@ -108,7 +112,7 @@ namespace GymLog.API.Data
             {
                 x.ToTable("Equipments");
                 x.HasKey(x => x.Id);
-                x.Property(p => p.Name).IsRequired();
+                x.Property(p => p.Name).HasMaxLength(100).IsRequired();
                 x.HasMany(x => x.Exercises);
             });
 
@@ -116,13 +120,29 @@ namespace GymLog.API.Data
             {
                 x.ToTable("Exercises");
                 x.HasKey(x => x.Id);
-                x.Property(p => p.Name).IsRequired();
+                x.Property(p => p.Name).HasMaxLength(100).IsRequired();
+                x.Property(p => p.DetailedMuscle).HasMaxLength(100);
+                x.Property(p => p.OtherMuscles).HasMaxLength(100);
+                x.Property(p => p.Type).HasConversion<int>();
+                x.Property(p => p.Difficulty).HasConversion<int>();
+                x.HasMany(x => x.Workouts);
             });
 
             builder.Entity<Workout>(x =>
             {
                 x.ToTable("Workouts");
                 x.HasKey(x => x.Id);
+                x.Property(p => p.CreatedBy).HasMaxLength(100);
+                x.Property(p => p.UpdatedBy).HasMaxLength(100);
+                x.Property(p => p.Version).IsConcurrencyToken().IsRowVersion();
+            });
+
+            builder.Entity<Set>(x =>
+            {
+                x.ToTable("Sets");
+                x.HasKey(x => x.Id);
+                x.Property(p => p.CreatedBy).HasMaxLength(100);
+                x.Property(p => p.UpdatedBy).HasMaxLength(100);
                 x.Property(p => p.Version).IsConcurrencyToken().IsRowVersion();
             });
 
@@ -130,14 +150,19 @@ namespace GymLog.API.Data
             {
                 x.ToTable("DayWorkouts");
                 x.HasKey(x => x.Id);
+                x.Property(p => p.Name).HasMaxLength(100);
+                x.Property(p => p.CreatedBy).HasMaxLength(100);
+                x.Property(p => p.UpdatedBy).HasMaxLength(100);
                 x.Property(p => p.Version).IsConcurrencyToken().IsRowVersion();
-            });           
+            });
 
             builder.Entity<Daylog>(x =>
             {
                 x.ToTable("Daylogs");
                 x.HasKey(x => x.Id);
                 x.HasMany(x => x.Workouts);
+                x.Property(p => p.CreatedBy).HasMaxLength(100);
+                x.Property(p => p.UpdatedBy).HasMaxLength(100);
                 x.Property(p => p.Version).IsConcurrencyToken().IsRowVersion();
             });
 
@@ -145,8 +170,10 @@ namespace GymLog.API.Data
             {
                 x.ToTable("Routines");
                 x.HasKey(x => x.Id);
-                x.Property(p => p.Name).IsRequired();
+                x.Property(p => p.Name).HasMaxLength(100).IsRequired();
                 x.HasMany(x => x.DayWorkouts);
+                x.Property(p => p.CreatedBy).HasMaxLength(100);
+                x.Property(p => p.UpdatedBy).HasMaxLength(100);
                 x.Property(p => p.Version).IsConcurrencyToken().IsRowVersion();
             });
 

@@ -6,8 +6,8 @@ export class Urls {
     static registerUrl = environment.apiUrl + 'auth/register';
 
     static usersUrl = environment.apiUrl + 'users/users';
-
     static musclesUrl = environment.apiUrl + 'muscles/';
+    static exercisesUrl = environment.apiUrl + 'exercises/';
 
     static userDaylogUrl = environment.apiUrl + 'daylogs/daylog/';
     static userDaylogsUrl = environment.apiUrl + 'user/daylogs';

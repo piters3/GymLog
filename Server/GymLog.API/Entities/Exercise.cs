@@ -3,17 +3,36 @@ using System.Collections.Generic;
 
 namespace GymLog.API.Entities
 {
+    public enum ExerciseType
+    {
+        Strength,
+        Stretching,
+        Powerlifting,
+        Olympic
+    }
+
+    public enum Difficulty
+    {
+        Beginner,
+        Intermediate,
+        Expert
+    }
+
     public class Exercise : BaseEntity
     {
         public string Name { get; private set; }
         public string Description { get; private set; }
+        public ExerciseType Type { get; private set; }
+        public Difficulty Difficulty { get; private set; }
+        public string DetailedMuscle { get; private set; }
+        public string OtherMuscles { get; private set; }
 
         #region Relationships
         public int EquipmentId { get; set; }
         public int MuscleId { get; set; }
         public virtual Equipment Equipment { get; private set; }
-        public virtual Muscle Muscle { get; private set; }
-        public ICollection<Workout> Workouts { get; private set; }
+        public virtual Muscle MainMuscle { get; private set; }
+        public virtual ICollection<Workout> Workouts { get; private set; }
         #endregion
 
         private Exercise()
@@ -21,12 +40,16 @@ namespace GymLog.API.Entities
 
         }
 
-        public Exercise(string name, string description, Muscle muscle, Equipment equipment)
+        public Exercise(string name, string description, ExerciseType type, Difficulty difficulty, Muscle muscle, Equipment equipment, string detailedMuscle = null, string otherMuscles = null)
         {
             SetName(name);
             SetDescription(description);
             SetMuscle(muscle);
             SetEquipment(equipment);
+            Type = type;
+            Difficulty = difficulty;
+            DetailedMuscle = detailedMuscle;
+            OtherMuscles = otherMuscles;
         }
 
         private void SetName(string name)
@@ -34,7 +57,7 @@ namespace GymLog.API.Entities
             if (string.IsNullOrEmpty(name))
                 throw new GymLogException(ExceptionCode.EmptyProperty, "Exercise name cannot be empty.");
 
-            Name = name.Trim().ToLowerInvariant();
+            Name = name.Trim();
         }
 
         private void SetDescription(string description)
@@ -42,7 +65,7 @@ namespace GymLog.API.Entities
             if (string.IsNullOrEmpty(description))
                 throw new GymLogException(ExceptionCode.EmptyProperty, "Exercise description cannot be empty.");
 
-            Description = description.Trim().ToLowerInvariant();
+            Description = description.Trim();
         }
 
         private void SetEquipment(Equipment equipment)
@@ -58,7 +81,7 @@ namespace GymLog.API.Entities
             if (muscle is null)
                 throw new GymLogException(ExceptionCode.NullReference, "Exercise muscle cannot be null.");
 
-            Muscle = muscle;
+            MainMuscle = muscle;
         }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace GymLog.API.Migrations
 {
-    public partial class Routines : Migration
+    public partial class Sets : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace GymLog.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false)
+                    Name = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -26,7 +26,7 @@ namespace GymLog.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false)
+                    Name = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,7 +54,7 @@ namespace GymLog.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(maxLength: 256, nullable: true),
+                    UserName = table.Column<string>(maxLength: 256, nullable: false),
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
@@ -68,8 +68,8 @@ namespace GymLog.API.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    Name = table.Column<string>(nullable: true),
-                    Surname = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(maxLength: 100, nullable: true),
+                    Surname = table.Column<string>(maxLength: 100, nullable: true),
                     Enabled = table.Column<bool>(nullable: false),
                     Gender = table.Column<int>(nullable: false),
                     Weight = table.Column<int>(nullable: false),
@@ -87,8 +87,12 @@ namespace GymLog.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(nullable: true),
+                    Type = table.Column<int>(nullable: false),
+                    Difficulty = table.Column<int>(nullable: false),
+                    DetailedMuscle = table.Column<string>(maxLength: 100, nullable: true),
+                    OtherMuscles = table.Column<string>(maxLength: 100, nullable: true),
                     EquipmentId = table.Column<int>(nullable: false),
                     MuscleId = table.Column<int>(nullable: false)
                 },
@@ -139,8 +143,8 @@ namespace GymLog.API.Migrations
                     Version = table.Column<byte[]>(rowVersion: true, nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     UpdatedDate = table.Column<DateTime>(nullable: true),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    UpdatedBy = table.Column<string>(nullable: true),
+                    CreatedBy = table.Column<string>(maxLength: 100, nullable: true),
+                    UpdatedBy = table.Column<string>(maxLength: 100, nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<int>(nullable: false)
                 },
@@ -164,9 +168,9 @@ namespace GymLog.API.Migrations
                     Version = table.Column<byte[]>(rowVersion: true, nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     UpdatedDate = table.Column<DateTime>(nullable: true),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    UpdatedBy = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 100, nullable: true),
+                    UpdatedBy = table.Column<string>(maxLength: 100, nullable: true),
+                    Name = table.Column<string>(maxLength: 100, nullable: false),
                     Frequency = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
                     IsCurrent = table.Column<bool>(nullable: false),
@@ -277,9 +281,9 @@ namespace GymLog.API.Migrations
                     Version = table.Column<byte[]>(rowVersion: true, nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     UpdatedDate = table.Column<DateTime>(nullable: true),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    UpdatedBy = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
+                    CreatedBy = table.Column<string>(maxLength: 100, nullable: true),
+                    UpdatedBy = table.Column<string>(maxLength: 100, nullable: true),
+                    Name = table.Column<string>(maxLength: 100, nullable: true),
                     Day = table.Column<int>(nullable: false),
                     RoutineId = table.Column<int>(nullable: true)
                 },
@@ -303,11 +307,8 @@ namespace GymLog.API.Migrations
                     Version = table.Column<byte[]>(rowVersion: true, nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     UpdatedDate = table.Column<DateTime>(nullable: true),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    UpdatedBy = table.Column<string>(nullable: true),
-                    Sets = table.Column<int>(nullable: false),
-                    Reps = table.Column<int>(nullable: false),
-                    Weight = table.Column<int>(nullable: false),
+                    CreatedBy = table.Column<string>(maxLength: 100, nullable: true),
+                    UpdatedBy = table.Column<string>(maxLength: 100, nullable: true),
                     ExerciseId1 = table.Column<int>(nullable: true),
                     DayWorkoutId = table.Column<int>(nullable: true),
                     DaylogId = table.Column<int>(nullable: true)
@@ -331,6 +332,33 @@ namespace GymLog.API.Migrations
                         name: "FK_Workouts_Exercises_ExerciseId1",
                         column: x => x.ExerciseId1,
                         principalTable: "Exercises",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Version = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    UpdatedDate = table.Column<DateTime>(nullable: true),
+                    CreatedBy = table.Column<string>(maxLength: 100, nullable: true),
+                    UpdatedBy = table.Column<string>(maxLength: 100, nullable: true),
+                    Number = table.Column<int>(nullable: false),
+                    Reps = table.Column<int>(nullable: false),
+                    Weight = table.Column<float>(nullable: false),
+                    WorkoutId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sets_Workouts_WorkoutId",
+                        column: x => x.WorkoutId,
+                        principalTable: "Workouts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -371,6 +399,11 @@ namespace GymLog.API.Migrations
                 name: "IX_Routines_UserId",
                 table: "Routines",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sets_WorkoutId",
+                table: "Sets",
+                column: "WorkoutId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaims_UserId",
@@ -419,6 +452,9 @@ namespace GymLog.API.Migrations
         {
             migrationBuilder.DropTable(
                 name: "RoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "Sets");
 
             migrationBuilder.DropTable(
                 name: "UserClaims");

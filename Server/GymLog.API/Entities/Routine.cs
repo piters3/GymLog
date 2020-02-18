@@ -11,7 +11,7 @@ namespace GymLog.API.Entities
 
         public int UserId { get; private set; }
         public virtual User User { get; private set; }
-        public ICollection<DayWorkout> DayWorkouts { get; set; }
+        public virtual ICollection<DayWorkout> DayWorkouts { get; set; }
 
         public Routine()
         {

@@ -33,6 +33,8 @@ import { BaseModalComponent } from './_shared/components/base-modal/base-modal.c
 import { DaylogsComponent } from './user/daylogs/daylogs.component';
 import { MonthComponent } from './_shared/components/month/month.component';
 import { DaylogComponent } from './user/daylog/daylog.component';
+import { ExercisesComponent } from './exercises/exercises.component';
+import { ExerciseComponent } from './exercise/exercise.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -43,45 +45,47 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    NavComponent,
-    RegisterComponent,
-    AdminPanelComponent,
-    HasRoleDirective,
-    UserManagementComponent,
-    BaseModalComponent,
-    UserEditModalComponent,
-    MuscleEditModalComponent,
-    MuscleAddModalComponent,
-    LoadingSpinnerComponent,
-    ModalSpinnerComponent,
-    BaseComponent,
-    MusclesComponent,
-    DaylogsComponent,
-    MonthComponent,
-    DaylogComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    BsDatepickerModule.forRoot(),
-    TabsModule.forRoot(),
-    BsDropdownModule.forRoot(),
-    ModalModule.forRoot(),
-    JwtModule.forRoot({
-      config: {
-        tokenGetter,
-        whitelistedDomains: ['localhost:5000'],
-        blacklistedRoutes: ['localhost:5000/api/auth']
-      }
-    }),
-    BrowserAnimationsModule,
+   declarations: [
+      AppComponent,
+      HomeComponent,
+      NavComponent,
+      RegisterComponent,
+      AdminPanelComponent,
+      HasRoleDirective,
+      UserManagementComponent,
+      BaseModalComponent,
+      UserEditModalComponent,
+      MuscleEditModalComponent,
+      MuscleAddModalComponent,
+      LoadingSpinnerComponent,
+      ModalSpinnerComponent,
+      BaseComponent,
+      MusclesComponent,
+      DaylogsComponent,
+      MonthComponent,
+      DaylogComponent,
+      ExercisesComponent,
+      ExerciseComponent
+   ],
+   imports: [
+      BrowserModule,
+      BrowserAnimationsModule,
+      AppRoutingModule,
+      HttpClientModule,
+      FormsModule,
+      ReactiveFormsModule,
+      BsDatepickerModule.forRoot(),
+      TabsModule.forRoot(),
+      BsDropdownModule.forRoot(),
+      ModalModule.forRoot(),
+     JwtModule.forRoot({
+       config: {
+         tokenGetter,
+         whitelistedDomains: ['localhost:5000'],
+         blacklistedRoutes: ['localhost:5000/api/auth']
+       }
+     }),
+     BrowserAnimationsModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-bottom-right',

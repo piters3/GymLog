@@ -1,7 +1,6 @@
 using AutoMapper;
 using GymLog.API.DTOs;
 using GymLog.API.Entities;
-using System.Linq;
 
 namespace GymLog.API.Helpers
 {
@@ -29,6 +28,10 @@ namespace GymLog.API.Helpers
             //CreateMap<Daylog, DaylogDto>().ForMember(dest => dest.Workouts, opt => opt.MapFrom(src => src.WorkoutDaylogs.Select(x => x.Workout)));
             //CreateMap<Daylog, DaylogDto>().ForMember(dest => dest.Workouts, opt => opt.MapFrom(src => src.Workouts));
             CreateMap<Daylog, DaylogDto>();
+            CreateMap<Set, SetDto>();
+            CreateMap<SetDto, Set>();
+            CreateMap<Exercise, ExerciseDto>();
+            CreateMap<ExerciseDto, Exercise>();
         }
     }
 }

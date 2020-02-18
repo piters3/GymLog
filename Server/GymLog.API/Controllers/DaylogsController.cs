@@ -43,10 +43,9 @@ namespace GymLog.API.Controllers
         public async Task<IActionResult> GetDaylog(DateTime date)
         {
             var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var daylog = await _repo.GetDaylog(id, date);
-            var result = _mapper.Map<DaylogDto>(daylog);
+            DaylogDto daylog = await _repo.GetDaylog(id, date);
 
-            return Ok(result);
+            return Ok(daylog);
         }
     }
 }

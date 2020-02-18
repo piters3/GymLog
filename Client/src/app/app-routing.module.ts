@@ -5,6 +5,8 @@ import { HomeComponent } from './home/home.component';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { DaylogsComponent } from './user/daylogs/daylogs.component';
 import { DaylogComponent } from './user/daylog/daylog.component';
+import { ExercisesComponent } from './exercises/exercises.component';
+import { ExerciseComponent } from './exercise/exercise.component';
 
 // const routes: Routes = [
 //   { path: 'home', component: HomeComponent },
@@ -17,6 +19,8 @@ import { DaylogComponent } from './user/daylog/daylog.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
+  { path: 'exercises', component: ExercisesComponent },
+  { path: 'exercises/:id', component: ExerciseComponent },
   {
     path: 'admin',
     runGuardsAndResolvers: 'always',

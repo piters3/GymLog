@@ -1,4 +1,5 @@
 ﻿using GymLog.API.Data;
+using GymLog.API.DTOs;
 using GymLog.API.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,11 +24,35 @@ namespace GymLog.API.Repositories
             .Select(x => x.Date)
             .ToListAsync();
 
-        public async Task<Daylog> GetDaylog(int userId, DateTime date)
-            => await _ctx.Daylogs
-            .Where(x => x.UserId == userId && x.Date == date)
-            .Include(x => x.Workouts)
-            .ThenInclude(x => x.Exercise)
-            .FirstOrDefaultAsync();
+        //public async Task<Daylog> GetDaylog(int userId, DateTime date)
+        //    => await _ctx.Daylogs
+        //    .Where(x => x.UserId == userId && x.Date == date)
+        //    .Include(d => d.Workouts)
+        //        .ThenInclude(w => w.Exercise)
+        //    .Include(d => d.Workouts)
+        //        .ThenInclude(w => w.Sets.OrderBy(x => x.Number))
+        //    .FirstOrDefaultAsync();
+
+
+        public async Task<DaylogDto> GetDaylog(int userId, DateTime date)
+        {
+            return await _ctx.Daylogs
+                .Where(d => d.UserId == userId && d.Date == date)
+                .Select(d => new DaylogDto
+                {
+                    Date = d.Date,
+                    Workouts = d.Workouts.Select(w => new WorkoutDto
+                    {
+                        ExerciseId = w.ExerciseId,
+                        ExerciseName = w.Exercise.Name,
+                        Sets = w.Sets.Select(s => new SetDto
+                        {
+                            Number = s.Number,
+                            Reps = s.Reps,
+                            Weight = s.Weight
+                        }).OrderBy(s => s.Number).ToList()
+                    }).ToList()
+                }).FirstOrDefaultAsync();
+        }
     }
 }
