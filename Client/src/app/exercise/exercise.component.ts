@@ -33,7 +33,7 @@ export class ExerciseComponent extends BaseComponent {
       distinctUntilChanged(),
       takeUntil(this.destroy$)
     ).subscribe((exercise) => {
-      console.log(exercise)
+      // console.log(exercise)
     });
   }
 

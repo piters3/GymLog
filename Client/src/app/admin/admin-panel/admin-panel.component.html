@@ -1,19 +1,15 @@
-<div class="container mt-5">
-  <h2>Admin Panel</h2>
+<div class="m-3">
+  <h3>Admin Panel</h3>
   <div class="tab-panel">
     <tabset #tabset class="member-tabset">
       <tab heading="{{ 'UserManagement' | translate }}">
         <ng-container *ngIf="tabset.tabs[0]?.active">
-          <div class="container">
-            <app-user-management></app-user-management>
-          </div>
+          <app-user-management></app-user-management>
         </ng-container>
       </tab>
       <tab heading="Muscles">
         <ng-container *ngIf="tabset.tabs[1]?.active">
-          <div class="container">
-            <app-muscles></app-muscles>
-          </div>
+          <app-muscles></app-muscles>
         </ng-container>
       </tab>
     </tabset>

@@ -12,11 +12,15 @@ export class DaylogsService {
   constructor(private http: HttpClient) { }
 
   getDaylogsDates(date: Date) {
-    return this.http.get<Date[]>(Urls.userDaylogsDatesUrl + moment(date).format('YYYY-MM-DD'));
+    return this.http.get<Date[]>(Urls.daylogsDatesUrl + moment(date).format('YYYY-MM-DD'));
   }
 
   getDaylog(date: Date) {
 
-    return this.http.get<DaylogDto>(Urls.userDaylogUrl + moment(date).format('YYYY-MM-DD'));
+    return this.http.get<DaylogDto>(Urls.daylogsUrl + moment(date).format('YYYY-MM-DD'));
+  }
+
+  add(daylog: DaylogDto) {
+    return this.http.post<DaylogDto>(Urls.daylogsUrl, daylog);
   }
 }

@@ -7,37 +7,16 @@ import { DaylogsComponent } from './user/daylogs/daylogs.component';
 import { DaylogComponent } from './user/daylog/daylog.component';
 import { ExercisesComponent } from './exercises/exercises.component';
 import { ExerciseComponent } from './exercise/exercise.component';
-
-// const routes: Routes = [
-//   { path: 'home', component: HomeComponent },
-//   {
-//     path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard], runGuardsAndResolvers: 'always',
-//     data: { roles: ['Admin'] }
-//   },
-//   { path: '**', redirectTo: 'home', pathMatch: 'full' },
-// ];
+import { AddDaylogComponent } from './user/add-daylog/add-daylog.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'exercises', component: ExercisesComponent },
   { path: 'exercises/:id', component: ExerciseComponent },
-  {
-    path: 'admin',
-    runGuardsAndResolvers: 'always',
-    canActivate: [AuthGuard],
-    children: [
-      { path: '', component: AdminPanelComponent, data: { roles: ['Admin'] } }
-    ]
-  },
-  {
-    path: 'user',
-    runGuardsAndResolvers: 'always',
-    canActivate: [AuthGuard],
-    children: [
-      { path: 'logs', component: DaylogsComponent, data: { roles: ['User'] } },
-      { path: 'logs/:date', component: DaylogComponent, data: { roles: ['User'] } }
-    ]
-  },
+  { path: 'logs', component: DaylogsComponent, canActivate: [AuthGuard], runGuardsAndResolvers: 'always', data: { roles: ['User'] } },
+  { path: 'logs/new/:date', component: AddDaylogComponent, canActivate: [AuthGuard], runGuardsAndResolvers: 'always', data: { roles: ['User'] } },
+  { path: 'logs/:date', component: DaylogComponent, canActivate: [AuthGuard], runGuardsAndResolvers: 'always', data: { roles: ['User'] } },
+  { path: 'admin', component: AdminPanelComponent, canActivate: [AuthGuard], runGuardsAndResolvers: 'always', data: { roles: ['Admin'] } },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 

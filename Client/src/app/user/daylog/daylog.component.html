@@ -1,31 +1,35 @@
 <ng-container *ngIf="!(loading$ | async); else loading">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Exercise Name</th>
-              <th scope="col">Lifting Logs</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let workout of (daylog$ | async).workouts">
-              <td>
-                <a [routerLink]="['.', workout.exerciseId]">{{workout.exerciseName}}</a>
-              </td>
-              <td>
-                <ng-container *ngFor="let set of workout.sets">
-                  Set {{set.number}} : {{set.reps}}x{{set.weight}} <br>
-                </ng-container>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+  <div class="m-3">
+    <h3>Daylog of {{routeDate | date:'dd-MM-yyyy'}}</h3>
+    <ng-container *ngIf="(daylog$ | async) as daylog; else empty">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Exercise Name</th>
+            <th scope="col">Lifting Logs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let workout of daylog.workouts">
+            <td>
+              <a [routerLink]="['/exercises', workout.exerciseId]">{{workout.exerciseName}}</a>
+            </td>
+            <td>
+              <ng-container *ngFor="let set of workout.sets">
+                Set {{set.number}} : {{set.reps}}x{{set.weight}} <br>
+              </ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
   </div>
 </ng-container>
+
+<ng-template #empty>
+  <app-empty message="No workout sessions on {{routeDate | date:'dd-MM-yyyy'}}" addType="daylog" link="/logs/new/{{routeDate | date:'yyyy-MM-dd'}}">
+  </app-empty>
+</ng-template>
 
 <ng-template #loading>
   <app-loading-spinner></app-loading-spinner>

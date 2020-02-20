@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { BsModalRef } from 'ngx-bootstrap';
 
 @Component({
@@ -12,10 +12,12 @@ export class BaseModalComponent implements OnInit {
   protected form: FormGroup;
   protected success$: Observable<boolean>;
   protected modalLoading$: Observable<boolean>;
+  protected onClose: Subject<object>;
 
   constructor(protected bsModalRef: BsModalRef, protected fb: FormBuilder) { }
 
   ngOnInit() {
+    this.onClose = new Subject();
   }
 
 }

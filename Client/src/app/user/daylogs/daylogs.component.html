@@ -1,13 +1,16 @@
 <ng-container *ngIf="!(loading$ | async); else loading">
-  <div class="container">
+  <div class="m-3">
+    <h3>Daylogs</h3>
     <div class="row">
-      <div class="col-xs-12 col-12 col-md-4 form-group">
+      <div class="col-md-3 form-group">
         <input type="text" class="form-control" [bsConfig]="bsConfig" #dp="bsDatepicker" bsDatepicker
           [(bsValue)]="initialValue" (bsValueChange)="onValueChange($event)">
       </div>
     </div>
     <div class="row">
-      <app-month [month]="month"></app-month>
+      <div class="col-md-12">
+        <app-month [month]="month"></app-month>
+      </div>
     </div>
   </div>
 </ng-container>

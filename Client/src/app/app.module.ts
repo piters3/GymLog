@@ -35,6 +35,10 @@ import { MonthComponent } from './_shared/components/month/month.component';
 import { DaylogComponent } from './user/daylog/daylog.component';
 import { ExercisesComponent } from './exercises/exercises.component';
 import { ExerciseComponent } from './exercise/exercise.component';
+import { EmptyComponent } from './_shared/components/empty/empty.component';
+import { FooterComponent } from './footer/footer.component';
+import { AddDaylogComponent } from './user/add-daylog/add-daylog.component';
+import { AddDaylogModalComponent } from './user/add-daylog/add-daylog-modal/add-daylog-modal.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -65,7 +69,11 @@ export function HttpLoaderFactory(http: HttpClient) {
       MonthComponent,
       DaylogComponent,
       ExercisesComponent,
-      ExerciseComponent
+      ExerciseComponent,
+      EmptyComponent,
+      FooterComponent,
+      AddDaylogComponent,
+      AddDaylogModalComponent
    ],
    imports: [
       BrowserModule,
@@ -110,7 +118,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     BaseModalComponent,
     UserEditModalComponent,
     MuscleEditModalComponent,
-    MuscleAddModalComponent
+    MuscleAddModalComponent,
+    AddDaylogModalComponent
   ],
   bootstrap: [
     AppComponent

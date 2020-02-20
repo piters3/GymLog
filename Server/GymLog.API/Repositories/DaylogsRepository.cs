@@ -43,7 +43,7 @@ namespace GymLog.API.Repositories
                     Date = d.Date,
                     Workouts = d.Workouts.Select(w => new WorkoutDto
                     {
-                        ExerciseId = w.ExerciseId,
+                        ExerciseId = w.Exercise.Id,
                         ExerciseName = w.Exercise.Name,
                         Sets = w.Sets.Select(s => new SetDto
                         {
@@ -53,6 +53,12 @@ namespace GymLog.API.Repositories
                         }).OrderBy(s => s.Number).ToList()
                     }).ToList()
                 }).FirstOrDefaultAsync();
+        }
+
+        public async Task AddAsync(Daylog entity)
+        {
+            await _ctx.Daylogs.AddAsync(entity);
+            await _ctx.SaveChangesAsync();
         }
     }
 }

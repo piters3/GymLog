@@ -3,3 +3,12 @@
 @import '../node_modules/font-awesome/css/font-awesome.min.css';
 @import '../node_modules/ngx-toastr/toastr.css';
 @import '../node_modules/ngx-bootstrap/datepicker/bs-datepicker.css';
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}

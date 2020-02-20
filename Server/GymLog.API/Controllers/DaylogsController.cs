@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using GymLog.API.DTOs;
+using GymLog.API.Entities;
 using GymLog.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -38,7 +39,7 @@ namespace GymLog.API.Controllers
             return Ok(dates);
         }
 
-        [HttpGet("daylog/{date}")]
+        [HttpGet("{date}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDaylog(DateTime date)
         {
@@ -46,6 +47,25 @@ namespace GymLog.API.Controllers
             DaylogDto daylog = await _repo.GetDaylog(id, date);
 
             return Ok(daylog);
+        }
+
+        /// <summary>
+        /// Adds new daylog.
+        /// </summary>
+        /// <param name="daylogDto"></param>
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpPost]
+        public async Task<IActionResult> Post(DaylogDto daylogDto)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var daylog = _mapper.Map<Daylog>(daylogDto);
+
+            await _repo.AddAsync(daylog);
+
+            return CreatedAtAction(nameof(GetDaylog), new { id = daylog.Id }, daylog);
         }
     }
 }

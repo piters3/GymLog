@@ -1,0 +1,33 @@
+<ng-container *ngIf="!(loading$ | async); else loading">
+  <div class="m-3">
+    <h3>New Daylog in {{routeDate}}</h3>
+    <table *ngIf="daylog.workouts.length > 0" class="table">
+      <thead>
+        <tr>
+          <th scope="col">Exercise Name</th>
+          <th scope="col">Lifting Logs</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let workout of daylog.workouts">
+          <td>
+            <a [routerLink]="['/exercises', workout.exerciseId]">{{workout.exerciseName}}</a>
+          </td>
+          <td>
+            <ng-container *ngFor="let set of workout.sets">
+              Set {{set.number}} : {{set.reps}}x{{set.weight}} <br>
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="btn btn-info" (click)="onAdd()">Add workout logs</button>
+    <button type="submit" [hidden]="daylog.workouts.length === 0" class="btn btn-success"
+      (click)="onSubmit()">Submit</button>
+
+  </div>
+</ng-container>
+
+<ng-template #loading>
+  <app-loading-spinner></app-loading-spinner>
+</ng-template>

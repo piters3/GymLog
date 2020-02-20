@@ -33,4 +33,17 @@ export class DaylogsStore {
       this._loading.next(false);
     });
   }
+
+  add(daylog: DaylogDto) {
+    // this._loading.next(true);
+    this.daylogsService.add(daylog).subscribe(res => {
+      debugger;
+      if (res.id) {
+        // this._muscles.next([...this.muscles, res]);
+        // this._success.next(true)
+
+      }
+      this._loading.next(false);
+    });
+  }
 }

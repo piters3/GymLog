@@ -1,26 +1,24 @@
 <ng-container *ngIf="!(loading$ | async); else loading">
   <ng-container *ngIf="(exercise$ | async) as ex">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="card">
-            <div class="card-body">
-              <h4 class="card-title">{{ex.name}}</h4>
-              <p class="card-text"><strong>Main muscle group: </strong>{{ex.mainMuscleName}}</p>
-              <p class="card-text"><strong>Type: </strong>{{ex.type}}</p>
-              <p class="card-text"><strong>Equipment: </strong>{{ex.equipmentName}}</p>
-              <p class="card-text"><strong>Difficulty: </strong>{{ex.difficulty}}</p>
-              <p class="card-text"><strong>Detailed muscle: </strong>{{ex.detailedMuscle}}</p>
-              <p class="card-text"><strong>Other muscles: </strong>{{ex.otherMuscles}}</p>
-            </div>
+    <div class="row m-3">
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">{{ex.name}}</h3>
+            <p class="card-text"><strong>Main muscle group: </strong>{{ex.mainMuscleName}}</p>
+            <p class="card-text"><strong>Type: </strong>{{ex.type}}</p>
+            <p class="card-text"><strong>Equipment: </strong>{{ex.equipmentName}}</p>
+            <p class="card-text"><strong>Difficulty: </strong>{{ex.difficulty}}</p>
+            <p class="card-text"><strong>Detailed muscle: </strong>{{ex.detailedMuscle}}</p>
+            <p class="card-text"><strong>Other muscles: </strong>{{ex.otherMuscles}}</p>
           </div>
         </div>
-        <div class="col-sm-6">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">How To Perform Exercise</h5>
-              <p class="card-text">{{ex.description}}</p>
-            </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">How To Perform Exercise</h5>
+            <p class="card-text">{{ex.description}}</p>
           </div>
         </div>
       </div>
