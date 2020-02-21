@@ -60,5 +60,26 @@ namespace GymLog.API.Repositories
             await _ctx.Daylogs.AddAsync(entity);
             await _ctx.SaveChangesAsync();
         }
+
+        public async Task<DaylogDto> GetDaylog(int id)
+        {
+            return await _ctx.Daylogs
+                .Where(d => d.Id == id)
+                .Select(d => new DaylogDto
+                {
+                    Date = d.Date,
+                    Workouts = d.Workouts.Select(w => new WorkoutDto
+                    {
+                        ExerciseId = w.Exercise.Id,
+                        ExerciseName = w.Exercise.Name,
+                        Sets = w.Sets.Select(s => new SetDto
+                        {
+                            Number = s.Number,
+                            Reps = s.Reps,
+                            Weight = s.Weight
+                        }).OrderBy(s => s.Number).ToList()
+                    }).ToList()
+                }).FirstOrDefaultAsync();
+        }
     }
 }

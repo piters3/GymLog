@@ -39,7 +39,20 @@ namespace GymLog.API.Controllers
             return Ok(dates);
         }
 
-        [HttpGet("{date}")]
+        /// <summary>
+        /// Find daylog by Id.
+        /// </summary>
+        /// <param name="id"></param>  
+        [HttpGet("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Get(int id)
+        {
+            DaylogDto daylog = await _repo.GetDaylog(id);
+
+            return Ok(daylog);
+        }
+
+        [HttpGet("{date:DateTime}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDaylog(DateTime date)
         {
@@ -61,11 +74,13 @@ namespace GymLog.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var daylog = _mapper.Map<Daylog>(daylogDto);
+            daylog.UserId = id;
 
             await _repo.AddAsync(daylog);
 
-            return CreatedAtAction(nameof(GetDaylog), new { id = daylog.Id }, daylog);
+            return CreatedAtAction(nameof(Get), new { id = daylog.Id }, daylog);
         }
     }
 }

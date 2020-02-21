@@ -9,7 +9,7 @@ namespace GymLog.API.Entities
         public DateTime Date { get; private set; }
 
         #region Relationships
-        public int UserId { get; private set; }
+        public int UserId { get; set; }
         public virtual User User { get; private set; }
         public virtual ICollection<Workout> Workouts { get; private set; }
         #endregion

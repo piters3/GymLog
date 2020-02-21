@@ -25,16 +25,18 @@ namespace GymLog.API.Helpers
             CreateMap<Workout, WorkoutDto>()
                 .ForMember(dest => dest.ExerciseId, opt => opt.MapFrom(src => src.Exercise.Id))
                 .ForMember(dest => dest.ExerciseName, opt => opt.MapFrom(src => src.Exercise.Name));
-            CreateMap<WorkoutDto, Workout>();
+            CreateMap<WorkoutDto, Workout>()
+                .ForMember(dest => dest.ExerciseId, opt => opt.MapFrom(src => src.ExerciseId));
             //CreateMap<Daylog, DaylogDto>().ForMember(dest => dest.Workouts, opt => opt.MapFrom(src => src.WorkoutDaylogs.Select(x => x.Workout)));
             //CreateMap<Daylog, DaylogDto>().ForMember(dest => dest.Workouts, opt => opt.MapFrom(src => src.Workouts));
-            CreateMap<Daylog, DaylogDto>();
-            CreateMap<DaylogDto, Daylog>();
             CreateMap<Set, SetDto>();
             CreateMap<SetDto, Set>();
-            CreateMap<Exercise, ExerciseDto>();
-            CreateMap<ExerciseDto, Exercise>();
-          
+            CreateMap<Exercise, ExerciseDto>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+            CreateMap<ExerciseDto, Exercise>()
+                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+            CreateMap<Daylog, DaylogDto>();
+            CreateMap<DaylogDto, Daylog>();
         }
     }
 }

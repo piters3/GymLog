@@ -10,6 +10,8 @@ namespace GymLog.API.Repositories
     {
         Task<ICollection<DateTime>> GetDaylogsDates(int userId, DateTime date);
         Task<DaylogDto> GetDaylog(int userId, DateTime date);
+        Task<DaylogDto> GetDaylog(int id);
         Task AddAsync(Daylog entity);
+
     }
 }
