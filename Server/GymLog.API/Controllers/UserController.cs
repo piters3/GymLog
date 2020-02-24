@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using GymLog.API.DTOs;
+using GymLog.API.Helpers;
 using GymLog.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,8 +31,7 @@ namespace GymLog.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetUserDaylogs()
         {
-            var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var daylogs = await _repo.GetUserDaylogs(id);
+            var daylogs = await _repo.GetUserDaylogs(this.CurrentUserId());
             var result = _mapper.Map<ICollection<DaylogDto>>(daylogs);
 
             return Ok(result);

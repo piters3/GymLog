@@ -1,6 +1,6 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
+using GymLog.API.Helpers;
 using GymLog.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,8 +29,7 @@ namespace GymLog.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDaylogsDates()
         {
-            var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            var routines = await _repo.GetRoutines(id);
+            var routines = await _repo.GetRoutines(this.CurrentUserId());
 
             return Ok(routines);
         }

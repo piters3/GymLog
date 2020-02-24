@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using GymLog.API.DTOs;
@@ -8,6 +7,7 @@ using GymLog.API.Entities;
 using GymLog.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using GymLog.API.Helpers;
 
 namespace GymLog.API.Controllers
 {
@@ -33,8 +33,7 @@ namespace GymLog.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDaylogsDates(DateTime date)
         {
-            var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            ICollection<DateTime> dates = await _repo.GetDaylogsDates(id, date);
+            ICollection<DateTime> dates = await _repo.GetDaylogsDates(this.CurrentUserId(), date);
 
             return Ok(dates);
         }
@@ -56,8 +55,7 @@ namespace GymLog.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDaylog(DateTime date)
         {
-            var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            DaylogDto daylog = await _repo.GetDaylog(id, date);
+            DaylogDto daylog = await _repo.GetDaylog(this.CurrentUserId(), date);
 
             return Ok(daylog);
         }
@@ -74,13 +72,14 @@ namespace GymLog.API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var id = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
             var daylog = _mapper.Map<Daylog>(daylogDto);
-            daylog.UserId = id;
+            //daylog.UserId = this.CurrentUserId();
 
             await _repo.AddAsync(daylog);
 
-            return CreatedAtAction(nameof(Get), new { id = daylog.Id }, daylog);
+            var resultDto = _mapper.Map<DaylogDto>(daylog);
+
+            return CreatedAtAction(nameof(Get), new { id = daylog.Id }, resultDto);
         }
     }
 }

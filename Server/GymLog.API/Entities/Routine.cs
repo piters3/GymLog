@@ -2,14 +2,14 @@
 
 namespace GymLog.API.Entities
 {
-    public class Routine : AuditableEntity
+    public class Routine : AuditableEntity, IUserId
     {
         public string Name { get; set; }
         public int Frequency { get; set; }
         public string Description { get; set; }
         public bool IsCurrent { get; set; }
 
-        public int UserId { get; private set; }
+        public int UserId { get; set; }
         public virtual User User { get; private set; }
         public virtual ICollection<DayWorkout> DayWorkouts { get; set; }
 

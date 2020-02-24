@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -49,15 +50,18 @@ namespace GymLog.API.Data
                 return;
 
             var username = httpContext.User.Identity.Name;
-            //var authenticatedUserId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            var currentUserId = int.Parse(httpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
 
             var modifiedEntries = ChangeTracker.Entries()
                 .Where(x => x.State == EntityState.Added || x.State == EntityState.Modified);
 
             foreach (var entry in modifiedEntries)
             {
-                var entity = entry.Entity as AuditableEntity;
-                entity?.SetAuditProperties(entry.State, username);
+                if (entry.Entity is AuditableEntity auditableEntity)
+                    auditableEntity.SetAuditProperties(entry.State, username);
+
+                if (entry.Entity is IUserId entityWithUserId)
+                    entityWithUserId.UserId = currentUserId;
             }
         }
 

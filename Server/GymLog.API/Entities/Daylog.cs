@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace GymLog.API.Entities
 {
-    public class Daylog : AuditableEntity
+    public class Daylog : AuditableEntity, IUserId
     {
         public DateTime Date { get; private set; }
 

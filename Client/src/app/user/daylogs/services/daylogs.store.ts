@@ -9,10 +9,12 @@ import { DaylogDto } from 'src/app/_models/daylogDto';
 export class DaylogsStore {
 
   private readonly _loading = new BehaviorSubject(false);
+  private readonly _success = new BehaviorSubject(false);
   private readonly _dates: BehaviorSubject<Date[]> = new BehaviorSubject([]);
   private readonly _daylog: BehaviorSubject<DaylogDto> = new BehaviorSubject(null);
 
   public loading$ = this._loading.asObservable();
+  public success$ = this._success.asObservable();
   public dates$ = this._dates.asObservable();
   public daylog$ = this._daylog.asObservable();
 
@@ -35,15 +37,16 @@ export class DaylogsStore {
   }
 
   add(daylog: DaylogDto) {
-    // this._loading.next(true);
+    this._loading.next(true);
     this.daylogsService.add(daylog).subscribe(res => {
-      debugger;
-      if (res.id) {
-        // this._muscles.next([...this.muscles, res]);
-        // this._success.next(true)
-
+      if (res.status === 201) {
+        this._success.next(true)
       }
       this._loading.next(false);
     });
+  }
+
+  resetSuccess() {
+    this._success.next(false);
   }
 }

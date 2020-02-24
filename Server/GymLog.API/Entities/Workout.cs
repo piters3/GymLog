@@ -6,7 +6,7 @@ namespace GymLog.API.Entities
     public class Workout : AuditableEntity
     {
         #region Relationships
-        public int ExerciseId { get; }
+        public int ExerciseId { get; private set; }
         public virtual Exercise Exercise { get; private set; }
         public virtual ICollection<Set> Sets { get; private set; }
 

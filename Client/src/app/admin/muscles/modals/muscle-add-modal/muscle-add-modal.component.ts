@@ -41,5 +41,4 @@ export class MuscleAddModalComponent extends BaseModalComponent {
   onSubmit(): void {
     this.musclesStore.add(this.form.value);
   }
-
 }

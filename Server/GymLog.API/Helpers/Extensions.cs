@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace GymLog.API.Helpers
 {
@@ -10,5 +12,7 @@ namespace GymLog.API.Helpers
             response.Headers.Add("Access-Control-Expose-Headers", "Application-Error");
             response.Headers.Add("Access-Control-Allow-Origin", "*");
         }
+
+        public static int CurrentUserId(this ControllerBase ctrl) => int.Parse(ctrl.User.FindFirst(ClaimTypes.NameIdentifier).Value);
     }
 }
